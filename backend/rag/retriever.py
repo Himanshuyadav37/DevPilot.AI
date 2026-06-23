@@ -1,14 +1,25 @@
-from backend.rag.chroma_client import get_collection
-from backend.rag.embeddings import embed
+from rag.chroma_manager import collection
+from rag.embeddings import generate_embedding
 
-def retrieve(query: str, top_k: int = 5) -> str:
-    collection = get_collection()
-    query_embedding = embed(query)
-    
+
+def retrieve_context(query: str):
+
+    embedding = generate_embedding(query)
+
     results = collection.query(
-        query_embeddings=[query_embedding],
-        n_results=top_k
+        query_embeddings=[embedding],
+        n_results=3
     )
-    
-    docs = results.get("documents", [[]])[0]
-    return "\n\n".join(docs) if docs else "No relevant context found."
+
+    return results
+
+def get_context(query: str):
+
+    results = retrieve_context(query)
+
+    documents = results.get(
+        "documents",
+        [[]]
+    )[0]
+
+    return "\n".join(documents)

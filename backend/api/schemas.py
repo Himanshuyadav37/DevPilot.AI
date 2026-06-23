@@ -1,17 +1,11 @@
 from pydantic import BaseModel
-from typing import Optional, Dict, Any, List
 
-class ProjectRunRequest(BaseModel):
-    task: str
+class ProjectCreate(BaseModel):
+    title: str
+    description: str
 
-class ProjectRunResponse(BaseModel):
-    run_id: str
-    status: str
-    message: str
-
-class RunStatusResponse(BaseModel):
-    run_id: str
-    status: str
-    current_agent: Optional[str]
-    errors: Optional[List[str]]
-    final_state: Optional[Dict[str, Any]]
+class ProjectResponse(BaseModel):
+    id: str
+    title: str
+    description: str
+    owner_id: str

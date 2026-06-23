@@ -1,32 +1,68 @@
 import json
-from backend.agents.state import AgentState
-from backend.llm.groq_client import invoke
-from backend.llm.prompt_templates import build_coder_prompt
-from backend.rag.retriever import retrieve
+import re
 
-def coder_agent(state: AgentState) -> AgentState:
-    print(f"[Coder] Generating code...")
-    state["current_agent"] = "coder"
-    
-    rag_query = f"{state['task']} {state['plan'].get('tech_stack', [])}"
-    rag_context = retrieve(rag_query)
-    state["rag_context"] = rag_context
-    
-    prompt = build_coder_prompt(state["plan"], rag_context)
-    
+from llm.groq_client import generate_response
+from llm.prompt_templates import CODER_PROMPT
+
+from memory.project_memory import (
+    save_memory
+)
+
+
+def coder_agent(state):
+
+    project_plan = state["project_plan"]
+
+    prompt = CODER_PROMPT.format(
+        project_plan=project_plan
+    )
+
+    response = generate_response(prompt)
+
+    response = re.sub(
+        r"```json|```",
+        "",
+        response
+    ).strip()
+
     try:
-        response = invoke(prompt, system_prompt="You are an expert software engineer. Return only valid JSON.")
-        response = response.strip()
-        if response.startswith("```"):
-            response = response.split("```")[1]
-            if response.startswith("json"):
-                response = response[4:]
-        code = json.loads(response)
-        state["generated_code"] = code
-        state["current_agent"] = "coder_done"
-        print(f"[Coder] Generated {len(code)} files")
-    except Exception as e:
-        state["errors"].append(f"Coder failed: {str(e)}")
-        state["status"] = "failed"
-    
+
+        generated_files = json.loads(
+            response
+        )
+
+        state["agent_notes"].append(
+            "Coder generated project code"
+        )
+
+        save_memory(
+            {
+                "project_id":
+                    state["project_id"],
+
+                "agent":
+                    "coder",
+
+                "note":
+                    "Generated project code"
+            }
+        )
+
+    except Exception:
+
+        generated_files = {
+            "raw_response": response
+        }
+
+        state["agent_notes"].append(
+            "Coder returned non-JSON output"
+        )
+
+    state["generated_code"] = (
+        generated_files
+    )
+
+    print("\n=== GENERATED CODE ===\n")
+    print(state["generated_code"])
+
     return state

@@ -1,92 +1,161 @@
-def build_planner_prompt(task: str) -> str:
-    return f"""
-You are a software architect. Analyze this task and return a JSON plan.
+PLANNER_PROMPT = """
+You are a Senior Software Architect.
 
-TASK: {task}
+Analyze the software idea and generate:
 
-Return ONLY valid JSON in this exact format:
-{{
-  "files": ["main.py", "models.py"],
-  "tech_stack": ["FastAPI", "MongoDB"],
-  "subtasks": [
-    {{"file": "main.py", "description": "FastAPI entry point with routes"}},
-    {{"file": "models.py", "description": "Pydantic models for request/response"}}
-  ],
-  "complexity": "medium"
-}}
+1. Project Name
+2. Project Description
+3. Recommended Tech Stack
+4. Core Features
+5. Development Milestones
+6. Database Collections
 
-Return ONLY JSON. No explanation. No markdown.
+Return ONLY valid JSON.
+
+{
+  "project_name": "",
+  "project_description": "",
+  "tech_stack": [],
+  "features": [],
+  "milestones": [],
+  "database_collections": []
+}
 """
 
-def build_coder_prompt(plan: dict, rag_context: str) -> str:
-    return f"""
-You are an expert software engineer. Generate production-grade code based on this plan.
 
-PLAN: {plan}
+# =================================================================
 
-BEST PRACTICES & CONTEXT:
-{rag_context}
 
-Return ONLY valid JSON in this exact format:
+
+
+CODER_PROMPT = """
+You are a Senior Software Engineer.
+
+Generate production-ready code.
+
+Return ONLY valid JSON.
+
+Rules:
+1. Escape all quotes properly.
+2. Escape all newlines using \\n.
+3. Do not use markdown.
+4. Do not wrap output in ```json.
+
+Format:
+
 {{
-  "filename.py": "# full code here",
-  "another_file.py": "# full code here"
+  "files": [
+    {{
+      "path": "main.py",
+      "code": "escaped code here"
+    }}
+  ]
 }}
 
-Return ONLY JSON. No explanation. No markdown backticks.
+Project Plan:
+{project_plan}
 """
 
-def build_tester_prompt(code: dict) -> str:
-    code_str = "\n\n".join([f"# {fname}\n{content}" for fname, content in code.items()])
-    return f"""
-You are a QA engineer. Write pytest unit tests for this code.
 
-CODE:
-{code_str}
+# =============================================================================
 
-Return ONLY valid JSON:
-{{
-  "test_main.py": "# pytest test code here"
-}}
 
-Return ONLY JSON. No explanation. No markdown.
+TESTER_PROMPT = """
+You are a Senior QA Engineer.
+
+Analyze the generated code and provide:
+
+1. Possible Bugs
+2. Edge Cases
+3. Security Issues
+4. Performance Issues
+5. Suggested Test Cases
+
+Return the response in structured text.
+
+Generated Code:
+{generated_code}
 """
 
-def build_debugger_prompt(code: dict, test_failures: str) -> str:
-    code_str = "\n\n".join([f"# {fname}\n{content}" for fname, content in code.items()])
-    return f"""
-You are a debugging expert. Fix the code based on test failures.
 
-ORIGINAL CODE:
-{code_str}
 
-TEST FAILURES:
-{test_failures}
+# ===============================================================================
 
-Analyze failures, fix the bugs, return corrected code.
-Return ONLY valid JSON same format as input code:
-{{
-  "filename.py": "# fixed code here"
-}}
 
-Return ONLY JSON. No explanation. No markdown.
+
+
+
+DEBUGGER_PROMPT = """
+You are a Senior Software Debugging Engineer.
+
+Analyze the code and testing report.
+
+Provide:
+
+1. Bugs Found
+2. Root Cause
+3. Recommended Fixes
+4. Improved Code Suggestions
+
+Generated Code:
+{generated_code}
+
+Testing Report:
+{test_report}
 """
 
-def build_deployer_prompt(code: dict) -> str:
-    code_str = "\n\n".join([f"# {fname}\n{content}" for fname, content in code.items()])
-    return f"""
-You are a DevOps engineer. Generate deployment files for this code.
 
-CODE:
-{code_str}
 
-Return ONLY valid JSON:
+# ==============================================================================
+
+
+FIXER_PROMPT = """
+You are a Senior Software Engineer.
+
+Your task is to fix the generated code using the testing report.
+
+Generated Code:
+{generated_code}
+
+Testing Report:
+{test_report}
+
+Return ONLY valid JSON.
+
+Format:
+
 {{
-  "Dockerfile": "# dockerfile content",
-  "docker-compose.yml": "# compose content",
-  "requirements.txt": "# python packages",
-  "README.md": "# project readme"
+    "files":[
+        {{
+            "path":"main.py",
+            "code":"fixed code"
+        }}
+    ]
 }}
+"""
 
-Return ONLY JSON. No explanation. No markdown.
+
+# ========================================================================
+
+SUPERVISOR_PROMPT = """
+You are the Supervisor Agent.
+
+Available Agents:
+1. planner
+2. coder
+3. tester
+4. debugger
+5. deployer
+
+Current State:
+{state}
+
+Return ONLY one word:
+
+planner
+coder
+tester
+debugger
+deployer
+end
 """

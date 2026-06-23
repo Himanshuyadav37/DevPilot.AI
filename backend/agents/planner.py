@@ -1,31 +1,87 @@
 import json
-from backend.agents.state import AgentState
-from backend.llm.groq_client import invoke
-from backend.llm.prompt_templates import build_planner_prompt
+import re
 
-def planner_agent(state: AgentState) -> AgentState:
-    print(f"[Planner] Starting for task: {state['task']}")
-    state["current_agent"] = "planner"
-    
-    prompt = build_planner_prompt(state["task"])
-    
-    for attempt in range(2):
-        try:
-            response = invoke(prompt, system_prompt="You are a software architect. Return only valid JSON.")
-            # Clean response
-            response = response.strip()
-            if response.startswith("```"):
-                response = response.split("```")[1]
-                if response.startswith("json"):
-                    response = response[4:]
-            plan = json.loads(response)
-            state["plan"] = plan
-            state["current_agent"] = "planner_done"
-            print(f"[Planner] Plan created: {plan}")
-            return state
-        except json.JSONDecodeError as e:
-            print(f"[Planner] JSON parse failed attempt {attempt+1}: {e}")
-    
-    state["errors"].append("Planner failed to generate valid plan")
-    state["status"] = "failed"
-    return state
+from llm.groq_client import generate_response
+from llm.prompt_templates import PLANNER_PROMPT
+from db.project_service import create_project
+from rag.retriever import get_context
+
+from memory.project_memory import (
+    save_memory
+)
+
+
+def planner_agent(state):
+
+    idea = state["idea"]
+
+    owner_id = state["user_id"]
+
+    # Retrieve relevant context from RAG
+    context = get_context(idea)
+
+    prompt = f"""
+    {PLANNER_PROMPT}
+
+    RELEVANT KNOWLEDGE:
+    {context}
+
+    SOFTWARE IDEA:
+    {idea}
+    """
+
+    response = generate_response(prompt)
+
+    response = re.sub(
+        r"```json|```",
+        "",
+        response
+    ).strip()
+
+    try:
+
+        plan = json.loads(response)
+
+        project_id = create_project(
+            owner_id=owner_id,
+            idea=idea,
+            project_plan=plan
+        )
+
+        state["project_id"] = project_id
+        state["project_plan"] = plan
+
+        state["agent_notes"].append(
+            f"Planner created project plan for: {idea}"
+        )
+
+        save_memory(
+            {
+                "project_id": project_id,
+                "agent": "planner",
+                "note": f"Created plan for {idea}"
+            }
+        )
+
+        return state
+
+
+    except Exception as e:
+
+        state["agent_notes"].append(
+
+            "Planner failed to generate valid plan"
+
+        )
+
+        state["project_plan"] = {
+
+            "success": False,
+
+            "error": str(e),
+
+            "raw_response": response
+
+        }
+
+        return state

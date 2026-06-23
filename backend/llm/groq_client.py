@@ -1,35 +1,51 @@
 from groq import Groq
-from backend.config import settings
-import time
+from config import settings
 
-_current_key_index = 0
+current_key_index = 0
 
-def get_client() -> Groq:
-    global _current_key_index
-    key = settings.GROQ_KEYS[_current_key_index % len(settings.GROQ_KEYS)]
-    return Groq(api_key=key)
 
-def invoke(prompt: str, system_prompt: str = "You are a helpful AI assistant.", model: str = "llama-3.1-8b-instant") -> str:
-    global _current_key_index
-    max_retries = len(settings.GROQ_KEYS)
-    
-    for attempt in range(max_retries):
+def get_client():
+    global current_key_index
+
+    api_key = settings.GROQ_KEYS[current_key_index]
+
+    return Groq(api_key=api_key)
+
+
+def generate_response(prompt: str):
+
+    global current_key_index
+
+    for _ in range(len(settings.GROQ_KEYS)):
+
         try:
+
             client = get_client()
+
             response = client.chat.completions.create(
-                model=model,
+                model="llama-3.3-70b-versatile",
                 messages=[
-                    {"role": "system", "content": system_prompt},
-                    {"role": "user", "content": prompt}
-                ],
-                temperature=0.3,
-                max_tokens=4096
+                    {
+                        "role": "user",
+                        "content": prompt
+                    }
+                ]
             )
+
             return response.choices[0].message.content
+
         except Exception as e:
-            if "rate_limit" in str(e).lower():
-                _current_key_index += 1
-                time.sleep(1)
-            else:
-                raise e
-    raise Exception("All Groq API keys exhausted")
+
+            if "rate" in str(e).lower():
+
+                current_key_index = (
+                    current_key_index + 1
+                ) % len(settings.GROQ_KEYS)
+
+                continue
+
+            raise e
+
+    raise Exception(
+        "All Groq API Keys Exhausted"
+    )

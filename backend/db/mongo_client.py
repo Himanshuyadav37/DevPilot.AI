@@ -1,10 +1,13 @@
-from motor.motor_asyncio import AsyncIOMotorClient
-from backend.config import settings
+from pymongo import MongoClient
+from config import settings
 
-_client = None
+client = MongoClient(settings.MONGO_URL)
 
-def get_db():
-    global _client
-    if _client is None:
-        _client = AsyncIOMotorClient(settings.MONGO_URL)
-    return _client[settings.DB_NAME]
+db = client[settings.DB_NAME]
+
+users_collection = db["users"]
+projects_collection = db["projects"]
+history_collection = db["history"]
+
+# NEW
+executions_collection = db["executions"]

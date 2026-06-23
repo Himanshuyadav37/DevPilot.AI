@@ -1,25 +1,76 @@
 from fastapi import FastAPI
-from fastapi.middleware.cors import CORSMiddleware
-from backend.auth.routes import router as auth_router
-from backend.api.routes.project import router as project_router
-from backend.api.routes.status import router as status_router
-from backend.api.routes.history import router as history_router
 
-app = FastAPI(title="DevPilot AI", version="1.0.0")
+from db.mongo_client import db
 
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["http://localhost:5173"],
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
+from auth.routes import router as auth_router
+from api.users import router as user_router
+from api.planner import router as planner_router
+from api.projects import router as project_router
+from api.routes.execution import (
+    router as execution_router
+)
+from api.routes.memory import (
+    router as memory_router
 )
 
-app.include_router(auth_router)
-app.include_router(project_router)
-app.include_router(status_router)
-app.include_router(history_router)
+app = FastAPI(
+    title="NeuroForge AI",
+    description="Autonomous Multi-Agent Software Engineering Platform",
+    version="1.0.0"
+)
+
 
 @app.get("/")
 def root():
-    return {"message": "DevPilot AI is running"}
+    return {
+        "message": "NeuroForge AI Running"
+    }
+
+
+@app.get("/health")
+def health_check():
+    return {
+        "status": "healthy"
+    }
+
+
+# Auth Routes
+app.include_router(
+    auth_router,
+    prefix="/auth",
+    tags=["Authentication"]
+)
+
+# User Routes
+app.include_router(
+    user_router,
+    prefix="/users",
+    tags=["Users"]
+)
+
+
+# planner agent route
+app.include_router(
+    planner_router,
+    prefix="/planner",
+    tags=["Planner Agent"]
+)
+
+# Project Route
+app.include_router(
+    project_router,
+    prefix="/projects",
+    tags=["Projects"]
+)
+
+app.include_router(
+    execution_router,
+    prefix="/ai",
+    tags=["NeuroForge"]
+)
+
+app.include_router(
+    memory_router,
+    prefix="/memory",
+    tags=["Memory"]
+)

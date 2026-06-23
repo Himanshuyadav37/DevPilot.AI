@@ -1,15 +1,28 @@
-from typing import TypedDict, Optional, List, Dict, Any
+from typing import TypedDict, Dict, List
 
 class AgentState(TypedDict):
-    run_id: str
+    idea: str
+
+    project_id: str
+
+    project_plan: Dict
+
+    generated_code: Dict
+
+    fixed_code: Dict
+
+    project_path: str
+
+    test_results: str
+
+    debug_report: str
+
+    deployment_plan: Dict
+
+    messages: List[str]
+
+    iterations: int
+
     user_id: str
-    task: str
-    plan: Optional[Dict[str, Any]]
-    rag_context: Optional[str]
-    test_results: Optional[Dict[str, Any]]
-    fixed_code: Optional[Dict[str, str]]
-    deployment_files: Optional[Dict[str, str]]
-    debug_attempts: int
-    errors: List[str]
-    status: str  # "running", "completed", "failed"
-    current_agent: str
+
+    agent_notes: List[str]

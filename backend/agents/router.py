@@ -6,37 +6,62 @@ def route_after_testing(state):
     )
 
     print("\n=== ROUTER ===")
-    print("Iterations:", iterations)
+
+    print(
+        "Iterations:",
+        iterations
+    )
 
     report = state.get(
         "test_results",
-        ""
-    ).lower()
+        {}
+    )
 
-    print("Report Preview:")
-    print(report[:300])
+    status = report.get(
+        "status",
+        "FAIL"
+    )
 
-    if iterations >= 2:
-        return "end"
+    print(
+        "Tester Status:",
+        status
+    )
 
-    bug_keywords = [
-        "bug",
-        "issue",
-        "error",
-        "security",
-        "vulnerability"
-    ]
+    MAX_ITERATIONS = 3
 
-    for keyword in bug_keywords:
+    try:
 
-        if keyword in report:
+        if status == "PASS":
 
-            print("Routing -> Debugger")
+            print(
+                "Routing -> Deployer"
+            )
 
-            # state["iterations"] += 1
+            return "end"
 
-            return "debugger"
+        if iterations >= MAX_ITERATIONS:
 
-    print("Routing -> End")
+            print(
+                f"Max iterations ({MAX_ITERATIONS}) reached"
+            )
 
-    return "end"
+            print(
+                "Routing -> End"
+            )
+
+            return "end"
+
+        print(
+            "Routing -> Debugger"
+        )
+
+        return "debugger"
+
+    except Exception as e:
+
+        print(
+            "Router Error:",
+            str(e)
+        )
+
+        return "debugger"

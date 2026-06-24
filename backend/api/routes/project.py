@@ -14,6 +14,12 @@ from db.project_service import (
     get_user_projects
 )
 
+from fastapi.responses import FileResponse
+
+from services.zip_service import (
+    create_project_zip
+)
+
 router = APIRouter()
 
 
@@ -52,3 +58,32 @@ def get_project(
         )
 
     return project
+
+
+@router.get(
+    "/{project_id}/download"
+)
+def download_project(
+    project_id: str
+):
+
+    project = get_project_by_id(
+        project_id
+    )
+
+    if not project:
+
+        raise HTTPException(
+            status_code=404,
+            detail="Project not found"
+        )
+
+    zip_path = create_project_zip(
+        project_id
+    )
+
+    return FileResponse(
+        path=zip_path,
+        filename=f"{project_id}.zip",
+        media_type="application/zip"
+    )

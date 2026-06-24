@@ -11,13 +11,22 @@ def save_execution(data):
         data
     )
 
-    return str(result.inserted_id)
+    return str(
+        result.inserted_id
+    )
 
 
 def get_all_executions():
 
     executions = list(
-        executions_collection.find()
+
+        executions_collection
+        .find()
+        .sort(
+            "created_at",
+            -1
+        )
+
     )
 
     for execution in executions:
@@ -33,11 +42,22 @@ def get_execution_by_id(
     execution_id: str
 ):
 
-    execution = executions_collection.find_one(
-        {
-            "_id": ObjectId(execution_id)
-        }
-    )
+    try:
+
+        execution = (
+            executions_collection.find_one(
+                {
+                    "_id":
+                        ObjectId(
+                            execution_id
+                        )
+                }
+            )
+        )
+
+    except Exception:
+
+        return None
 
     if execution:
 
@@ -52,22 +72,46 @@ def delete_execution(
     execution_id: str
 ):
 
-    executions_collection.delete_one(
-        {
-            "_id": ObjectId(execution_id)
-        }
-    )
+    try:
+
+        result = (
+            executions_collection.delete_one(
+                {
+                    "_id":
+                        ObjectId(
+                            execution_id
+                        )
+                }
+            )
+        )
+
+        return (
+            result.deleted_count > 0
+        )
+
+    except Exception:
+
+        return False
+
 
 def get_user_executions(
     user_id: str
 ):
 
     executions = list(
-        executions_collection.find(
+
+        executions_collection
+        .find(
             {
-                "user_id": user_id
+                "user_id":
+                    user_id
             }
         )
+        .sort(
+            "created_at",
+            -1
+        )
+
     )
 
     for execution in executions:
@@ -77,3 +121,27 @@ def get_user_executions(
         )
 
     return executions
+
+
+def execution_exists(
+    execution_id: str
+):
+
+    try:
+
+        execution = (
+            executions_collection.find_one(
+                {
+                    "_id":
+                        ObjectId(
+                            execution_id
+                        )
+                }
+            )
+        )
+
+        return execution is not None
+
+    except Exception:
+
+        return False

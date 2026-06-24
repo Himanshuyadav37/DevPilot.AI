@@ -13,12 +13,30 @@ from api.routes.memory import (
     router as memory_router
 )
 
+from fastapi.middleware.cors import CORSMiddleware
+
+from api.routes.download import (
+    router as download_router
+)
 app = FastAPI(
     title="NeuroForge AI",
     description="Autonomous Multi-Agent Software Engineering Platform",
     version="1.0.0"
 )
+app.add_middleware(
+    CORSMiddleware,
 
+    allow_origins=[
+        "http://localhost:5173",
+        "http://127.0.0.1:5173"
+    ],
+
+    allow_credentials=True,
+
+    allow_methods=["*"],
+
+    allow_headers=["*"]
+)
 
 @app.get("/")
 def root():
@@ -73,4 +91,9 @@ app.include_router(
     memory_router,
     prefix="/memory",
     tags=["Memory"]
+)
+
+
+app.include_router(
+    download_router
 )

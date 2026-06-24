@@ -18,6 +18,9 @@ from fastapi.middleware.cors import CORSMiddleware
 from api.routes.download import (
     router as download_router
 )
+from api.routes.settings import (
+    router as settings_router
+)
 app = FastAPI(
     title="NeuroForge AI",
     description="Autonomous Multi-Agent Software Engineering Platform",
@@ -96,4 +99,10 @@ app.include_router(
 
 app.include_router(
     download_router
+)
+
+app.include_router(
+    settings_router,
+    prefix="/settings",
+    tags=["Settings"]
 )

@@ -1,0 +1,81 @@
+.hero-card{
+
+  background:#171717;
+
+  border:1px solid #2a2a2a;
+
+  border-radius:18px;
+
+  padding:40px;
+
+  min-height:180px;
+
+  display:flex;
+
+  align-items:center;
+
+  justify-content:space-between;
+}
+
+.hero-left{
+
+  max-width:700px;
+}
+
+.hero-title{
+
+  font-size:48px;
+
+  font-weight:700;
+
+  color:white;
+
+  margin-bottom:12px;
+}
+
+.hero-subtitle{
+
+  font-size:18px;
+
+  color:#d4d4d4;
+
+  margin-bottom:16px;
+}
+
+.hero-description{
+
+  font-size:15px;
+
+  color:#9ca3af;
+
+  line-height:1.8;
+}
+
+.generate-btn{
+
+  margin-top:24px;
+
+  background:white;
+
+  color:black;
+
+  border:none;
+
+  padding:12px 20px;
+
+  border-radius:10px;
+
+  font-weight:600;
+
+  transition:.2s;
+}
+
+.generate-btn:hover{
+
+  background:#e5e5e5;
+}
+
+.hero-right{
+
+  display:none;
+}

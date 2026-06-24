@@ -1,5 +1,6 @@
 import json
 import re
+from datetime import datetime
 
 from llm.groq_client import (
     generate_response
@@ -25,6 +26,15 @@ def tester_agent(state):
         generated_code = state.get(
             "generated_code"
         )
+
+    # Add step: Starting tester
+    state["execution_steps"].append({
+        "agent": "tester",
+        "step": "analyzing_code",
+        "status": "in_progress",
+        "message": "Analyzing generated code for syntax errors and issues",
+        "timestamp": datetime.utcnow().isoformat()
+    })
 
     prompt = TESTER_PROMPT.replace(
         "{generated_code}",
@@ -89,6 +99,23 @@ def tester_agent(state):
         }
 
     state["test_results"] = report
+
+    # Add step: Testing completed
+    status = report.get("status", "FAIL")
+    critical_count = report.get("summary", {}).get("critical_count", 0)
+    
+    state["execution_steps"].append({
+        "agent": "tester",
+        "step": "analyzing_code",
+        "status": "completed",
+        "message": f"Code analysis completed - Status: {status}, Critical issues: {critical_count}",
+        "details": {
+            "status": status,
+            "critical_count": critical_count,
+            "issues_count": len(report.get("issues", []))
+        },
+        "timestamp": datetime.utcnow().isoformat()
+    })
 
     state["agent_notes"].append(
         "Tester analyzed code"

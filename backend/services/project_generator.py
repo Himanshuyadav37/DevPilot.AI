@@ -44,7 +44,9 @@ def generate_project(
 
         "agent_notes": [],
 
-        "iterations": 0
+        "iterations": 0,
+
+        "execution_steps": []
     }
 
     result = graph.invoke(state)
@@ -160,6 +162,12 @@ def generate_project(
                 result.get(
                     "agent_notes",
                     []
+                ),
+
+            "execution_steps":
+                result.get(
+                    "execution_steps",
+                    []
                 )
         }
 
@@ -222,6 +230,12 @@ def generate_project(
             result.get(
                 "iterations",
                 0
+            ),
+
+        "execution_steps":
+            result.get(
+                "execution_steps",
+                []
             ),
 
         "zip_url":

@@ -26,3 +26,5 @@ class AgentState(TypedDict):
     user_id: str
 
     agent_notes: List[str]
+
+    execution_steps: List[Dict]

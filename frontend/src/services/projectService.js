@@ -4,19 +4,19 @@ export async function getProjects() {
 
   const response =
     await api.get(
-      "/projects"
+      "/ai/executions"
     );
 
   return response.data;
 }
 
-export async function getProject(
+export async function getExecution(
   id
 ) {
 
   const response =
     await api.get(
-      `/projects/${id}`
+      `/ai/executions/${id}`
     );
 
   return response.data;

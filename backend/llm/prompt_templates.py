@@ -434,7 +434,7 @@ Rules:
 - No TODOs.
 - No placeholders.
 - No pseudocode.
-- Include all imports.
+- Include all imports at the top of each file.
 - Include all functions.
 - Include all classes.
 - Include all schemas.
@@ -443,11 +443,43 @@ Rules:
 - Include database logic if required.
 - Use clean architecture.
 
+CRITICAL - AVOID THESE COMMON ERRORS:
+
+1. MISSING IMPORTS:
+   - Always import datetime, timedelta if using time operations
+   - Always import os, secrets if using environment variables
+   - Always import all models from schema files before using them
+   - Always import all dependencies before using them
+
+2. DUPLICATE DEFINITIONS:
+   - If database.py exists, import client from it - DO NOT redefine
+   - If schema.py exists, import models from it - DO NOT redefine
+   - DO NOT duplicate MongoDB collections across files
+
+3. ENVIRONMENT VARIABLES:
+   - Use os.environ.get("SECRET_KEY", "fallback") instead of os.environ["SECRET_KEY"]
+   - Or provide a default hardcoded value for development
+
+4. FASTAPI MULTI-FILE:
+   - main.py: from database import client, from schema import User, Event, etc.
+   - routes files: from database import collections, from schema import models
+   - main.py: app.include_router(router) for each router
+   - routes files: router = APIRouter(), NOT app = FastAPI()
+
+5. MODELS:
+   - Define all Pydantic models in schema.py
+   - Import them in main.py and routes files
+   - DO NOT define models inline in route files
+
 Verify before returning:
 - No syntax errors.
 - No missing imports.
 - No undefined functions.
 - No undefined variables.
+- No duplicate database client definitions.
+- No duplicate model definitions.
+- All models imported from schema.py if it exists.
+- All collections imported from database.py if it exists.
 
 Return ONLY valid JSON.
 

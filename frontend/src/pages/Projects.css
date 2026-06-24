@@ -1,0 +1,147 @@
+.page-header{
+
+  margin-bottom:24px;
+}
+
+.page-header h1{
+
+  color:white;
+
+  font-size:32px;
+
+  font-weight:700;
+
+  margin-bottom:8px;
+}
+
+.page-header p{
+
+  color:#9ca3af;
+
+  font-size:14px;
+}
+
+/* ========================= */
+/* STATES */
+/* ========================= */
+
+.page-state{
+
+  background:#171717;
+
+  border:1px solid #2a2a2a;
+
+  border-radius:16px;
+
+  padding:40px;
+
+  color:white;
+
+  text-align:center;
+}
+
+.page-state.error{
+
+  color:#ef4444;
+}
+
+/* ========================= */
+/* PROJECTS GRID */
+/* ========================= */
+
+.projects-grid{
+
+  display:grid;
+
+  grid-template-columns:
+  repeat(
+    auto-fill,
+    minmax(
+      320px,
+      1fr
+    )
+  );
+
+  gap:20px;
+}
+
+/* ========================= */
+/* PROJECT CARD */
+/* ========================= */
+
+.project-card{
+
+  background:#171717;
+
+  border:1px solid #2a2a2a;
+
+  border-radius:16px;
+
+  padding:22px;
+
+  transition:.2s;
+
+  display:flex;
+
+  flex-direction:column;
+
+  gap:12px;
+}
+
+.project-card:hover{
+
+  border-color:#404040;
+
+  transform:translateY(-2px);
+}
+
+.project-card h3{
+
+  color:white;
+
+  font-size:18px;
+
+  font-weight:600;
+
+  line-height:1.4;
+}
+
+.project-card p{
+
+  color:#9ca3af;
+
+  font-size:14px;
+}
+
+.project-meta{
+
+  display:flex;
+
+  align-items:center;
+
+  gap:12px;
+}
+
+.project-meta span{
+
+  background:#262626;
+
+  border:1px solid #333333;
+
+  color:#d4d4d4;
+
+  padding:6px 10px;
+
+  border-radius:999px;
+
+  font-size:12px;
+}
+
+.project-card small{
+
+  color:#737373;
+
+  margin-top:auto;
+
+  font-size:12px;
+}

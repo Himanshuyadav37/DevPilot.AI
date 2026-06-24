@@ -1,0 +1,186 @@
+.navbar{
+
+  height:64px;
+
+  display:flex;
+
+  align-items:center;
+
+  justify-content:space-between;
+
+  padding:0 24px;
+
+  background:#212121;
+
+  border-bottom:1px solid #2a2a2a;
+
+  position:sticky;
+
+  top:0;
+
+  z-index:1000;
+
+  flex-shrink:0;
+}
+
+.navbar-left{
+
+  display:flex;
+
+  flex-direction:column;
+
+  gap:2px;
+}
+
+.welcome{
+
+  color:#ffffff;
+
+  font-size:18px;
+
+  font-weight:600;
+}
+
+.subtitle{
+
+  color:#8a8a8a;
+
+  font-size:12px;
+}
+
+.navbar-right{
+
+  display:flex;
+
+  align-items:center;
+
+  gap:12px;
+}
+
+.search-box{
+
+  width:260px;
+
+  height:40px;
+
+  display:flex;
+
+  align-items:center;
+
+  gap:10px;
+
+  padding:0 14px;
+
+  background:#171717;
+
+  border:1px solid #2a2a2a;
+
+  border-radius:10px;
+
+  color:#8a8a8a;
+}
+
+.search-box input{
+
+  width:100%;
+
+  background:none;
+
+  color:white;
+
+  border:none;
+
+  outline:none;
+
+  font-size:14px;
+}
+
+.search-box input::placeholder{
+
+  color:#737373;
+}
+
+.icon-btn{
+
+  width:40px;
+
+  height:40px;
+
+  border-radius:10px;
+
+  background:#171717;
+
+  border:1px solid #2a2a2a;
+
+  color:white;
+
+  display:flex;
+
+  align-items:center;
+
+  justify-content:center;
+
+  transition:.2s;
+}
+
+.icon-btn:hover{
+
+  background:#262626;
+}
+
+.profile{
+
+  display:flex;
+
+  align-items:center;
+
+  gap:10px;
+
+  padding-left:8px;
+}
+
+.avatar{
+
+  width:36px;
+
+  height:36px;
+
+  border-radius:50%;
+
+  background:#ffffff;
+
+  color:#000000;
+
+  display:flex;
+
+  align-items:center;
+
+  justify-content:center;
+
+  font-weight:700;
+
+  font-size:14px;
+}
+
+.profile-info{
+
+  display:flex;
+
+  flex-direction:column;
+}
+
+.profile-name{
+
+  color:white;
+
+  font-size:14px;
+
+  font-weight:600;
+}
+
+.profile-role{
+
+  color:#8a8a8a;
+
+  font-size:11px;
+}

@@ -1,43 +1,113 @@
-import React from "react";
-import {
-  BrowserRouter as Router,
-  Routes,
-  Route,
-  Navigate,
-} from "react-router-dom";
+    import {
+      BrowserRouter,
+      Routes,
+      Route,
+      Navigate
+    } from "react-router-dom";
 
-import Dashboard from "./pages/Dashboard";
-import RunDetail from "./pages/RunDetail";
-import "./App.css";
+    import { AuthProvider } from "./contexts/AuthContext";
+    import ProtectedRoute from "./components/ProtectedRoute";
 
-function App() {
-  return (
-    <Router>
-      <div className="app">
-        <Routes>
-          <Route
-            path="/"
-            element={<Dashboard />}
-          />
+    import Dashboard from "./pages/Dashboard";
+    import GenerateProject from "./pages/GenerateProject";
+    import Projects from "./pages/Projects";
+    import Executions from "./pages/Executions";
+    import Settings from "./pages/Settings";
+    import Login from "./pages/Login";
+    import Signup from "./pages/Signup";
 
-          <Route
-            path="/dashboard"
-            element={<Dashboard />}
-          />
+    import ProjectDetails from "./pages/ProjectDetails";
 
-          <Route
-            path="/run/:runId"
-            element={<RunDetail />}
-          />
+    function App() {
 
-          <Route
-            path="*"
-            element={<Navigate to="/" replace />}
-          />
-        </Routes>
-      </div>
-    </Router>
-  );
-}
+      return (
 
-export default App;
+        <AuthProvider>
+
+          <BrowserRouter>
+
+            <Routes>
+
+              <Route
+                path="/"
+                element={
+                  <Navigate
+                    to="/dashboard"
+                  />
+                }
+              />
+
+              <Route
+                path="/login"
+                element={<Login />}
+              />
+
+              <Route
+                path="/signup"
+                element={<Signup />}
+              />
+
+              <Route
+                path="/dashboard"
+                element={
+                  <ProtectedRoute>
+                    <Dashboard />
+                  </ProtectedRoute>
+                }
+              />
+
+              <Route
+                path="/generate"
+                element={
+                  <ProtectedRoute>
+                    <GenerateProject />
+                  </ProtectedRoute>
+                }
+              />
+
+              <Route
+                path="/projects"
+                element={
+                  <ProtectedRoute>
+                    <Projects />
+                  </ProtectedRoute>
+                }
+              />
+
+              <Route
+                path="/projects/:id"
+                element={
+                  <ProtectedRoute>
+                    <ProjectDetails />
+                  </ProtectedRoute>
+                }
+              />
+
+              <Route
+                path="/executions"
+                element={
+                  <ProtectedRoute>
+                    <Executions />
+                  </ProtectedRoute>
+                }
+              />
+
+              <Route
+                path="/settings"
+                element={
+                  <ProtectedRoute>
+                    <Settings />
+                  </ProtectedRoute>
+                }
+              />
+
+            </Routes>
+
+          </BrowserRouter>
+
+        </AuthProvider>
+
+      );
+    }
+
+    export default App;

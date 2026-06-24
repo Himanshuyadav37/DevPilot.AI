@@ -1,0 +1,344 @@
+.generate-page{
+  display:flex;
+  flex-direction:column;
+  gap:24px;
+}
+
+/* ========================= */
+/* INPUT SECTION */
+/* ========================= */
+
+.generate-card{
+  background:#171717;
+  border:1px solid #2a2a2a;
+  border-radius:16px;
+  padding:32px;
+}
+
+.generate-card h1{
+  color:#ffffff;
+  font-size:32px;
+  font-weight:700;
+  margin-bottom:10px;
+}
+
+.generate-card p{
+  color:#9ca3af;
+  font-size:14px;
+  margin-bottom:20px;
+}
+
+.generate-card textarea{
+  width:100%;
+  height:180px;
+
+  resize:none;
+
+  background:#212121;
+
+  border:1px solid #333333;
+
+  border-radius:12px;
+
+  color:#ffffff;
+
+  padding:18px;
+
+  font-size:15px;
+
+  transition:.2s;
+}
+
+.generate-card textarea:focus{
+  border-color:#525252;
+  box-shadow:none;
+}
+
+.generate-card button{
+  margin-top:20px;
+
+  background:#ffffff;
+
+  color:#000000;
+
+  border:none;
+
+  padding:12px 18px;
+
+  border-radius:10px;
+
+  font-weight:600;
+
+  transition:.2s;
+}
+
+.generate-card button:hover{
+  opacity:.9;
+}
+
+/* ========================= */
+/* OUTPUT SECTION */
+/* ========================= */
+
+.output-card{
+  background:#171717;
+
+  border:1px solid #2a2a2a;
+
+  border-radius:16px;
+
+  padding:28px;
+}
+
+.output-card h2{
+  color:#ffffff;
+  margin-bottom:24px;
+}
+
+/* ========================= */
+/* STATS */
+/* ========================= */
+
+.result-grid{
+  display:grid;
+
+  grid-template-columns:
+  repeat(3,1fr);
+
+  gap:16px;
+
+  margin-bottom:24px;
+}
+
+.result-box{
+  background:#212121;
+
+  border:1px solid #2f2f2f;
+
+  border-radius:12px;
+
+  padding:20px;
+}
+
+.result-box span{
+  color:#9ca3af;
+  font-size:13px;
+}
+
+.result-box h3{
+  color:white;
+  font-size:22px;
+  margin-top:10px;
+}
+
+/* ========================= */
+/* DOWNLOAD */
+/* ========================= */
+
+.download-btn{
+  display:inline-flex;
+
+  align-items:center;
+
+  justify-content:center;
+
+  padding:12px 20px;
+
+  border-radius:10px;
+
+  background:#ffffff;
+
+  color:#000000;
+
+  text-decoration:none;
+
+  font-weight:600;
+
+  transition:.2s;
+}
+
+.download-btn:hover{
+  opacity:.9;
+}
+
+/* ========================= */
+/* CONTENT SECTIONS */
+/* ========================= */
+
+.section{
+  margin-top:30px;
+}
+
+.section h3{
+  color:white;
+  margin-bottom:14px;
+}
+
+.section p{
+  color:#d4d4d4;
+  line-height:1.8;
+}
+
+.section ul{
+  padding-left:18px;
+}
+
+.section li{
+  color:#d4d4d4;
+  margin-bottom:10px;
+}
+
+/* ========================= */
+/* TECH STACK */
+/* ========================= */
+
+.chips{
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+}
+
+.chip{
+  background:#262626;
+
+  border:1px solid #3a3a3a;
+
+  color:#d4d4d4;
+
+  border-radius:999px;
+
+  padding:8px 14px;
+
+  font-size:13px;
+}
+
+/* ========================= */
+/* TIMELINE */
+/* ========================= */
+
+.execution-timeline{
+  background:#212121;
+
+  border:1px solid #2f2f2f;
+
+  border-radius:12px;
+
+  padding:20px;
+
+  max-height:500px;
+
+  overflow-y:auto;
+}
+
+.timeline-item{
+  display:flex;
+
+  gap:16px;
+
+  padding:14px 0;
+
+  border-bottom:1px solid #2a2a2a;
+}
+
+.timeline-item:last-child{
+  border-bottom:none;
+}
+
+.timeline-time{
+  width:90px;
+
+  color:#737373;
+
+  font-size:12px;
+}
+
+.timeline-content{
+  flex:1;
+}
+
+.timeline-message{
+  color:#ffffff;
+  font-size:14px;
+}
+
+.timeline-details{
+  margin-top:6px;
+
+  color:#a3a3a3;
+
+  font-size:12px;
+}
+
+/* ========================= */
+/* STATUS BADGES */
+/* ========================= */
+
+.badge{
+  display:inline-flex;
+
+  align-items:center;
+
+  justify-content:center;
+
+  padding:4px 10px;
+
+  border-radius:999px;
+
+  font-size:11px;
+
+  font-weight:600;
+}
+
+.badge.completed{
+  background:#16351f;
+  color:#22c55e;
+}
+
+.badge.running{
+  background:#2a2a2a;
+  color:#d4d4d4;
+}
+
+.badge.failed{
+  background:#3b1818;
+  color:#ef4444;
+}
+
+/* ========================= */
+/* DEBUG REPORT */
+/* ========================= */
+
+.debug-box{
+  margin-top:12px;
+
+  padding:18px;
+
+  background:#212121;
+
+  border:1px solid #2f2f2f;
+
+  border-radius:12px;
+
+  color:#d4d4d4;
+
+  line-height:1.8;
+}
+
+/* ========================= */
+/* RESPONSIVE */
+/* ========================= */
+
+@media(max-width:900px){
+
+  .result-grid{
+    grid-template-columns:1fr;
+  }
+
+  .generate-card{
+    padding:24px;
+  }
+
+  .output-card{
+    padding:20px;
+  }
+}

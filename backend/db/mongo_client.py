@@ -8,6 +8,7 @@ db = client[settings.DB_NAME]
 users_collection = db["users"]
 projects_collection = db["projects"]
 history_collection = db["history"]
+executions_collection = db["executions"]
 
 # NEW
-executions_collection = db["executions"]
+settings_collection = db["settings"]

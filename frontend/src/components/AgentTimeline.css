@@ -1,0 +1,150 @@
+.workflow-card{
+
+  background:#171717;
+
+  border:1px solid #2a2a2a;
+
+  border-radius:18px;
+
+  padding:28px;
+}
+
+.workflow-top{
+
+  display:flex;
+
+  justify-content:space-between;
+
+  align-items:center;
+
+  margin-bottom:32px;
+}
+
+.workflow-top h2{
+
+  color:white;
+
+  font-size:28px;
+
+  font-weight:700;
+}
+
+.workflow-subtitle{
+
+  color:#9ca3af;
+
+  font-size:14px;
+}
+
+.workflow-status{
+
+  color:#22c55e;
+
+  font-size:14px;
+}
+
+.status-dot{
+
+  width:8px;
+
+  height:8px;
+
+  border-radius:50%;
+
+  background:#22c55e;
+}
+
+.workflow-container{
+
+  display:flex;
+
+  align-items:center;
+
+  justify-content:space-between;
+}
+
+.workflow-step{
+
+  flex:1;
+
+  text-align:center;
+
+  position:relative;
+}
+
+.workflow-icon{
+
+  width:68px;
+
+  height:68px;
+
+  margin:auto;
+
+  border-radius:50%;
+
+  background:#262626;
+
+  border:1px solid #404040;
+
+  color:white;
+
+  display:flex;
+
+  align-items:center;
+
+  justify-content:center;
+
+  box-shadow:none;
+}
+
+.workflow-step.active .workflow-icon{
+
+  background:white;
+
+  color:black;
+
+  border-color:white;
+}
+
+.workflow-line{
+
+  position:absolute;
+
+  top:34px;
+
+  left:65%;
+
+  width:70%;
+
+  height:1px;
+
+  background:#404040;
+}
+
+.workflow-text{
+
+  margin-top:14px;
+}
+
+.workflow-text p{
+
+  color:white;
+
+  font-size:14px;
+
+  font-weight:600;
+}
+
+.agent-status{
+
+  color:#9ca3af;
+
+  font-size:12px;
+
+  margin-top:4px;
+}
+
+.agent-status.active{
+
+  color:#22c55e;
+}

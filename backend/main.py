@@ -21,6 +21,11 @@ from api.routes.download import (
 from api.routes.settings import (
     router as settings_router
 )
+
+from api.routes import (
+    conversations
+)
+
 app = FastAPI(
     title="NeuroForge AI",
     description="Autonomous Multi-Agent Software Engineering Platform",
@@ -105,4 +110,10 @@ app.include_router(
     settings_router,
     prefix="/settings",
     tags=["Settings"]
+)
+
+app.include_router(
+    conversations.router,
+    prefix="/conversations",
+    tags=["Conversations"]
 )

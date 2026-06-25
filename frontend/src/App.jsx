@@ -6,6 +6,7 @@
     } from "react-router-dom";
 
     import { AuthProvider } from "./contexts/AuthContext";
+    import { ChatProvider } from "./contexts/ChatContext.jsx";
     import ProtectedRoute from "./components/ProtectedRoute";
 
     import Dashboard from "./pages/Dashboard";
@@ -24,88 +25,92 @@
 
         <AuthProvider>
 
-          <BrowserRouter>
+  <ChatProvider>
 
-            <Routes>
+    <BrowserRouter>
 
-              <Route
-                path="/"
-                element={
-                  <Navigate
-                    to="/dashboard"
-                  />
-                }
-              />
+      <Routes>
 
-              <Route
-                path="/login"
-                element={<Login />}
-              />
+        <Route
+          path="/"
+          element={
+            <Navigate
+              to="/dashboard"
+            />
+          }
+        />
 
-              <Route
-                path="/signup"
-                element={<Signup />}
-              />
+        <Route
+          path="/login"
+          element={<Login />}
+        />
 
-              <Route
-                path="/dashboard"
-                element={
-                  <ProtectedRoute>
-                    <Dashboard />
-                  </ProtectedRoute>
-                }
-              />
+        <Route
+          path="/signup"
+          element={<Signup />}
+        />
 
-              <Route
-                path="/generate"
-                element={
-                  <ProtectedRoute>
-                    <GenerateProject />
-                  </ProtectedRoute>
-                }
-              />
+        <Route
+          path="/dashboard"
+          element={
+            <ProtectedRoute>
+              <Dashboard />
+            </ProtectedRoute>
+          }
+        />
 
-              <Route
-                path="/projects"
-                element={
-                  <ProtectedRoute>
-                    <Projects />
-                  </ProtectedRoute>
-                }
-              />
+        <Route
+          path="/generate"
+          element={
+            <ProtectedRoute>
+              <GenerateProject />
+            </ProtectedRoute>
+          }
+        />
 
-              <Route
-                path="/projects/:id"
-                element={
-                  <ProtectedRoute>
-                    <ProjectDetails />
-                  </ProtectedRoute>
-                }
-              />
+        <Route
+          path="/projects"
+          element={
+            <ProtectedRoute>
+              <Projects />
+            </ProtectedRoute>
+          }
+        />
 
-              <Route
-                path="/executions"
-                element={
-                  <ProtectedRoute>
-                    <Executions />
-                  </ProtectedRoute>
-                }
-              />
+        <Route
+          path="/projects/:id"
+          element={
+            <ProtectedRoute>
+              <ProjectDetails />
+            </ProtectedRoute>
+          }
+        />
 
-              <Route
-                path="/settings"
-                element={
-                  <ProtectedRoute>
-                    <Settings />
-                  </ProtectedRoute>
-                }
-              />
+        <Route
+          path="/executions"
+          element={
+            <ProtectedRoute>
+              <Executions />
+            </ProtectedRoute>
+          }
+        />
 
-            </Routes>
+        <Route
+          path="/settings"
+          element={
+            <ProtectedRoute>
+              <Settings />
+            </ProtectedRoute>
+          }
+        />
 
-          </BrowserRouter>
+      </Routes>
 
-        </AuthProvider>
+    </BrowserRouter>
+
+  </ChatProvider>
+
+</AuthProvider>
 
       );
     }

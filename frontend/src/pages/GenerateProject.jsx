@@ -1,461 +1,131 @@
-import { useState } from "react";
+// ===============================
+// GenerateProject.jsx (PART 1)
+// Imports + State + Hooks + Generate Function
+// ===============================
 
+import { useState, useEffect } from "react";
 import DashboardLayout from "../layouts/DashboardLayout";
-import FileViewer from "../components/FileViewer";
+import AgentSelector from "../components/AgentSelector";
+import ChatInput from "../components/ChatInput";
+import ChatPanel from "../components/ChatPanel";
+import EngineerPanel from "../components/EngineerPanel";
+import ResearchPanel from "../components/ResearchPanel";
+import EducationPanel from "../components/EducationPanel";
+import AutomationPanel from "../components/AutomationPanel";
+import { useChat } from "../contexts/ChatContext";
 import api from "../services/api";
-
 import "./GenerateProject.css";
 
 function GenerateProject() {
-
   const [idea, setIdea] = useState("");
-  // const [agentType, setAgentType] = useState("engineer");
-
   const [loading, setLoading] = useState(false);
-
   const [result, setResult] = useState(null);
 
-  async function generate() {
+  const {
+    conversationId,
+    setConversationId,
+    messages,
+    setMessages,
+    currentAgent,
+    setCurrentAgent,
+    selectedConversation
+  } = useChat();
 
-    if (!idea.trim()) {
+  // ==========================
+  // Load Previous Conversation
+  // ==========================
+  useEffect(() => {
+    if (!selectedConversation) return;
 
-      alert("Enter project idea");
+    setCurrentAgent(selectedConversation.agent_type);
+    setIdea("");
+    setResult(null);
+  }, [selectedConversation, setCurrentAgent]);
 
-      return;
-    }
+  // ==========================
+  // Send Prompt
+  // ==========================
+  async function handleGenerate(prompt) {
+    if (!prompt.trim()) return;
 
     try {
-
       setLoading(true);
 
-      const response =
-        await api.post(
-          "/ai/execute-project",
-          {
-            idea
-          }
-        );
+      const response = await api.post("/ai/execute-project", {
+        idea: prompt,
+        agent_type: currentAgent,
+        conversation_id: conversationId
+      });
 
-      console.log(
-        response.data
-      );
+      setResult(response.data);
 
-      setResult(
-        response.data
-      );
+      if (response.data.conversation_id) {
+        setConversationId(response.data.conversation_id);
+      }
 
-    }
-
-    catch (error) {
-
+      if (currentAgent === "conversational") {
+        setMessages(prev => [
+          ...prev,
+          { role: "user", content: prompt },
+          { role: "assistant", content: response.data.message }
+        ]);
+      }
+    } catch (error) {
       console.error(error);
-
-      alert(
-        "Generation Failed"
-      );
-
-    }
-
-    finally {
-
+      alert("Generation Failed");
+    } finally {
       setLoading(false);
     }
   }
 
-  const files =
-    result?.generated_code?.files?.length
-      ? result.generated_code.files
-      : result?.fixed_code?.files || [];
-
   return (
-
     <DashboardLayout>
-
       <div className="generate-page">
-
         <div className="generate-card">
+          <h1>AI Workspace</h1>
+          <p>Select an AI mode and interact with NeuroForge AI.</p>
 
-          <h1>
-            Generate Software
-          </h1>
-
-          <p>
-            Describe your software idea and let NeuroForge build it.
-          </p>
-
-          <textarea
-
-            value={idea}
-
-            onChange={(e) =>
-              setIdea(
-                e.target.value
-              )
-            }
-
-            placeholder="Build an AI Resume Analyzer using FastAPI and MongoDB"
-
+          <AgentSelector
+            agentType={currentAgent}
+            setAgentType={setCurrentAgent}
           />
 
-          <button
-            onClick={generate}
-            disabled={loading}
-          >
+          <ChatInput
 
-            {
-              loading
-                ? "Generating..."
-                : "Generate Project"
-            }
+  value={idea}
 
-          </button>
+  onChange={setIdea}
 
+  agentType={currentAgent}
+
+  loading={loading}
+
+  onSend={handleGenerate}
+
+/>
         </div>
 
-        {
-
-          result && (
-
-            <div className="output-card">
-
-              <h2>
-                Project Generated
-              </h2>
-
-              <div className="result-grid">
-
-                <div className="result-box">
-
-                  <span>
-                    Project ID
-                  </span>
-
-                  <h3>
-                    {
-                      result.project_id
-                    }
-                  </h3>
-
-                </div>
-
-                <div className="result-box">
-
-                  <span>
-                    Status
-                  </span>
-
-                  <h3>
-                    {
-                      result.status
-                    }
-                  </h3>
-
-                </div>
-
-                <div className="result-box">
-
-                  <span>
-                    Iterations
-                  </span>
-
-                  <h3>
-                    {
-                      result.iterations
-                    }
-                  </h3>
-
-                </div>
-
-              </div>
-
-              <div
-                style={{
-                  marginTop: "25px",
-                  marginBottom: "30px"
-                }}
-              >
-
-                <a
-                  href={
-                    `http://127.0.0.1:8000${result.zip_url}`
-                  }
-                  target="_blank"
-                  rel="noreferrer"
-                  className="download-btn"
-                >
-                  ⬇ Download Project ZIP
-                </a>
-
-              </div>
-
-              <div className="section">
-
-                <h3>
-                  Project Overview
-                </h3>
-
-                <p>
-
-                  {
-                    result.project_plan
-                      ?.project_description
-                  }
-
-                </p>
-
-              </div>
-
-              <div className="section">
-
-                <h3>
-                  Tech Stack
-                </h3>
-
-                <div className="chips">
-
-                  {
-
-                    result.project_plan
-                      ?.tech_stack
-                      ?.frontend
-                      ?.map(
-                        item => (
-
-                          <span
-                            key={item}
-                            className="chip"
-                          >
-
-                            {item}
-
-                          </span>
-
-                        )
-                      )
-                  }
-
-                  {
-
-                    result.project_plan
-                      ?.tech_stack
-                      ?.backend
-                      ?.map(
-                        item => (
-
-                          <span
-                            key={item}
-                            className="chip"
-                          >
-
-                            {item}
-
-                          </span>
-
-                        )
-                      )
-                  }
-
-                  {
-
-                    result.project_plan
-                      ?.tech_stack
-                      ?.database
-                      ?.map(
-                        item => (
-
-                          <span
-                            key={item}
-                            className="chip"
-                          >
-
-                            {item}
-
-                          </span>
-
-                        )
-                      )
-                  }
-
-                </div>
-
-              </div>
-
-              <div className="section">
-
-                <h3>
-                  Execution Timeline
-                </h3>
-
-                <div className="execution-timeline">
-
-                  {
-                    result.execution_steps?.length > 0 ? (
-                      result.execution_steps.map(
-                        (step, index) => (
-                          <div
-  key={index}
-  className="timeline-item"
->
-
-                           <div className="timeline-time">
-                              {new Date(step.timestamp).toLocaleTimeString()}
-                            </div>
-
-                            <div className="timeline-content">
-
-                             <div className="timeline-header">
-
-                                <span
-  className={`badge ${step.status}`}
->
-                                  {step.agent}
-                                </span>
-
-                                <span className="timeline-message">
-                                  {step.message}
-                                </span>
-
-                              </div>
-
-                              {
-                                step.details && (
-                                  <div className="timeline-details">
-                                    {Object.entries(step.details).map(
-  ([key, value]) => {
-
-    let displayValue;
-
-    if (Array.isArray(value)) {
-      displayValue = value.join(", ");
-    } else if (
-      typeof value === "object" &&
-      value !== null
-    ) {
-      displayValue = JSON.stringify(value);
-    } else {
-      displayValue = String(value);
-    }
-
-    return (
-      <span
-        key={key}
-        style={{
-          marginRight: "16px"
-        }}
-      >
-        {key}: {displayValue}
-      </span>
-    );
-  }
-)}
-                                  </div>
-                                )
-                              }
-
-                            </div>
-
-                          </div>
-                        )
-                      )
-                    ) : (
-                      <p className="timeline-empty">
-                        No execution steps recorded
-                      </p>
-                    )
-
-                  }
-
-                </div>
-
-              </div>
-
-              <div className="section">
-
-                <h3>
-                  Features
-                </h3>
-
-                <ul>
-
-                  {
-
-                    result.project_plan
-                      ?.features
-                      ?.map(
-                        (
-                          feature,
-                          index
-                        ) => (
-
-                          <li
-                            key={index}
-                          >
-
-                            {feature}
-
-                          </li>
-
-                        )
-                      )
-                  }
-
-                </ul>
-
-              </div>
-
-              {
-
-                files.length > 0 && (
-
-                  <div className="section">
-
-                    <h3>
-                      Generated Files
-                    </h3>
-
-                    <FileViewer
-                      files={files}
-                    />
-
-                  </div>
-
-                )
-              }
-
-              {
-
-                result.debug_report && (
-
-                  <div className="section">
-
-                    <h3>
-                      Debug Report
-                    </h3>
-
-                    <div
-                      className="debug-box"
-                    >
-
-                      {
-                        result.debug_report
-                      }
-
-                    </div>
-
-                  </div>
-
-                )
-              }
-
-            </div>
-
-          )
-        }
-
+        {currentAgent === "engineer" && (
+          <EngineerPanel result={result} />
+        )}
+
+        {currentAgent === "conversational" && (
+          <ChatPanel messages={messages} />
+        )}
+
+        {currentAgent === "research" && (
+          <ResearchPanel result={result} />
+        )}
+
+        {currentAgent === "education" && (
+          <EducationPanel result={result} />
+        )}
+
+        {currentAgent === "automation" && (
+          <AutomationPanel result={result} />
+        )}
       </div>
-
     </DashboardLayout>
-
   );
 }
 

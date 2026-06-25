@@ -12,3 +12,5 @@ executions_collection = db["executions"]
 
 # NEW
 settings_collection = db["settings"]
+
+conversations_collection = db["conversations"]

@@ -32,11 +32,18 @@ def coder_agent(state):
         "timestamp": datetime.utcnow().isoformat()
     })
 
-    prompt = CODER_PROMPT.replace(
-        "{project_plan}",
-        json.dumps(
-            project_plan,
-            indent=2
+    prompt = (
+        CODER_PROMPT
+        .replace(
+            "{project_plan}",
+            json.dumps(
+                project_plan,
+                indent=2
+            )
+        )
+        .replace(
+            "{user_request}",
+            state.get("idea", "")
         )
     )
 

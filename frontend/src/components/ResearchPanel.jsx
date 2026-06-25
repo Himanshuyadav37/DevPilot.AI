@@ -1,23 +1,3 @@
-import GenericOutputPanel from "./GenericOutputPanel";
-
-function ResearchPanel({
-
-  result
-
-}) {
-
-  return (
-
-    <GenericOutputPanel
-
-      title="Research Output"
-
-      result={result}
-
-    />
-
-  );
-
-}
+import ResearchPanel from "./research/ResearchPanel";
 
 export default ResearchPanel;

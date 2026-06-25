@@ -239,6 +239,55 @@
   border-radius: 999px;
 }
 
+
+
+body.light .file-viewer,
+body.light .fullscreen-viewer {
+  background: #ffffff !important;
+  border-color: #d9e5f2 !important;
+}
+
+body.light .file-sidebar {
+  background: #f8fafc !important;
+  border-right-color: #dbe4ef !important;
+}
+
+body.light .file-sidebar-header h3,
+body.light .file-name {
+  color: #0f172a !important;
+}
+
+body.light .file-sidebar-header span {
+  color: #64748b !important;
+}
+
+body.light .file-item {
+  color: #334155 !important;
+}
+
+body.light .file-item:hover {
+  background: #eff6ff !important;
+}
+
+body.light .file-item.active {
+  background: #0f172a !important;
+  color: #ffffff !important;
+}
+
+body.light .code-panel,
+body.light .code-header {
+  background: #ffffff !important;
+}
+
+body.light .code-header {
+  border-bottom-color: #dbe4ef !important;
+}
+
+body.light .action-btn {
+  background: #0f172a !important;
+  color: #ffffff !important;
+}
+
 /* MOBILE */
 
 @media (max-width: 768px) {

@@ -1,6 +1,64 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import FileViewer from "./FileViewer";
 import api from "../services/api";
+
+function normalizePath(path = "") {
+  return path.replace(/^\.\//, "").replace(/^\//, "");
+}
+
+function findFile(files, matcher) {
+  return files.find(file => matcher(normalizePath(file.path || "").toLowerCase()));
+}
+
+function buildPreviewDocument(files) {
+  const htmlFile =
+    findFile(files, path => path.endsWith("index.html")) ||
+    findFile(files, path => path.endsWith(".html"));
+
+  if (!htmlFile?.code) return "";
+
+  let html = htmlFile.code;
+
+  const cssFiles = files.filter(file => normalizePath(file.path || "").toLowerCase().endsWith(".css"));
+  const jsFiles = files.filter(file => {
+    const path = normalizePath(file.path || "").toLowerCase();
+    return path.endsWith(".js") && !path.endsWith(".config.js");
+  });
+
+  cssFiles.forEach(file => {
+    const path = normalizePath(file.path || "");
+    const name = path.split("/").pop();
+    const escapedPath = path.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    const escapedName = name.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    const linkPattern = new RegExp(`<link[^>]+href=["'](?:\\./|/)?(?:${escapedPath}|${escapedName})["'][^>]*>`, "gi");
+    html = html.replace(linkPattern, `<style>\n${file.code}\n</style>`);
+  });
+
+  jsFiles.forEach(file => {
+    const path = normalizePath(file.path || "");
+    const name = path.split("/").pop();
+    const escapedPath = path.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    const escapedName = name.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    const scriptPattern = new RegExp(`<script[^>]+src=["'](?:\\./|/)?(?:${escapedPath}|${escapedName})["'][^>]*><\/script>`, "gi");
+    html = html.replace(scriptPattern, `<script>\n${file.code}\n</script>`);
+  });
+
+  if (cssFiles.length > 0 && !/<style[\s>]/i.test(html)) {
+    const styleBlock = "<style>\n" + cssFiles.map(file => file.code).join("\n") + "\n</style>";
+    html = html.includes("</head>")
+      ? html.replace("</head>", styleBlock + "</head>")
+      : styleBlock + html;
+  }
+
+  if (jsFiles.length > 0 && !/<script[\s>]/i.test(html)) {
+    const scriptBlock = "<script>\n" + jsFiles.map(file => file.code).join("\n") + "\n</script>";
+    html = html.includes("</body>")
+      ? html.replace("</body>", scriptBlock + "</body>")
+      : html + scriptBlock;
+  }
+
+  return html;
+}
 
 function EngineerPanel({
 
@@ -9,6 +67,7 @@ function EngineerPanel({
 }) {
 
   const [diffs, setDiffs] = useState([]);
+  const [previewOpen, setPreviewOpen] = useState(false);
 
   useEffect(() => {
     if (!result?.execution_id) return;
@@ -24,15 +83,26 @@ function EngineerPanel({
     }
   }, [result?.execution_id]);
 
-  if (!result) return null;
-
   const files =
 
-    result?.generated_code?.files?.length
+    result?.fixed_code?.files?.length
 
-      ? result.generated_code.files
+      ? result.fixed_code.files
 
-      : result?.fixed_code?.files || [];
+      : result?.generated_code?.files || [];
+
+  const previewDocument = useMemo(
+    () => buildPreviewDocument(files),
+    [files]
+  );
+
+  const downloadUrl = result?.zip_url
+    ? `http://127.0.0.1:8000${result.zip_url}`
+    : result?.project_id
+      ? `http://127.0.0.1:8000/projects/${result.project_id}/download`
+      : "";
+
+  if (!result) return null;
 
   return (
 
@@ -96,35 +166,51 @@ function EngineerPanel({
 
       </div>
 
-      <div
+      {(downloadUrl || previewDocument) && (
 
-        style={{
+        <div className="engineer-actions">
 
-          marginTop: "25px",
+          {downloadUrl && (
 
-          marginBottom: "30px"
+            <a
 
-        }}
+              href={downloadUrl}
 
-      >
+              target="_blank"
 
-        <a
+              rel="noreferrer"
 
-          href={`http://127.0.0.1:8000${result.zip_url}`}
+              className="download-btn"
 
-          target="_blank"
+            >
 
-          rel="noreferrer"
+              Download Project ZIP
 
-          className="download-btn"
+            </a>
 
-        >
+          )}
 
-          ⬇ Download Project ZIP
+          {previewDocument && (
 
-        </a>
+            <button
 
-      </div>
+              className="preview-open-btn"
+
+              type="button"
+
+              onClick={() => setPreviewOpen(true)}
+
+            >
+
+              Preview Fullscreen
+
+            </button>
+
+          )}
+
+        </div>
+
+      )}
 
       <div className="section">
 
@@ -424,6 +510,7 @@ function EngineerPanel({
 
       </div>
 
+
       {
 
         files.length > 0 && (
@@ -479,6 +566,40 @@ function EngineerPanel({
         )
 
       }
+
+
+      {previewOpen && previewDocument && (
+
+        <div className="preview-modal" role="dialog" aria-modal="true">
+
+          <div className="preview-modal-header">
+
+            <div className="preview-toolbar compact">
+              <span></span>
+              <span></span>
+              <span></span>
+              <strong>Live Preview</strong>
+            </div>
+
+            <button
+              className="preview-close-btn"
+              type="button"
+              onClick={() => setPreviewOpen(false)}
+            >
+              Close
+            </button>
+
+          </div>
+
+          <iframe
+            title="Generated project fullscreen preview"
+            srcDoc={previewDocument}
+            sandbox="allow-scripts allow-forms allow-modals"
+          />
+
+        </div>
+
+      )}
 
     </div>
 

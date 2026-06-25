@@ -21,6 +21,9 @@ from api.routes.download import (
 from api.routes.settings import (
     router as settings_router
 )
+from api.routes.research import (
+    router as research_router
+)
 
 from api.routes.user_memory import (
     router as user_memory_router
@@ -126,4 +129,9 @@ app.include_router(
     user_memory_router,
     prefix="/memory/user",
     tags=["User Memory"]
+)
+app.include_router(
+    research_router,
+    prefix="/research",
+    tags=["Research AI"]
 )

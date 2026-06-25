@@ -14,3 +14,4 @@ executions_collection = db["executions"]
 settings_collection = db["settings"]
 
 conversations_collection = db["conversations"]
+research_sessions_collection = db["research_sessions"]

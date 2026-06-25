@@ -4,6 +4,10 @@ import {
 } from "react";
 
 import {
+  Trash2
+} from "lucide-react";
+
+import {
   Link
 } from "react-router-dom";
 
@@ -47,11 +51,6 @@ function Projects() {
           "/ai/executions"
         );
 
-      console.log(
-        "Executions:",
-        response.data
-      );
-
       setProjects(
         response.data || []
       );
@@ -76,18 +75,60 @@ function Projects() {
 
   }
 
+  async function deleteProject(id) {
+
+    const confirmDelete =
+      window.confirm(
+        "Are you sure you want to delete this project?"
+      );
+
+    if (!confirmDelete) return;
+
+    try {
+
+      await api.delete(
+        `/ai/executions/${id}`
+      );
+
+      setProjects(prev =>
+        prev.filter(
+          project =>
+            project._id !== id
+        )
+      );
+
+    }
+
+    catch (error) {
+
+      console.error(error);
+
+      alert(
+        "Failed to delete project."
+      );
+
+    }
+
+  }
+
   return (
 
     <DashboardLayout>
 
+      <div className="projects-page">
+
       <div className="page-header">
 
         <h1>
+
           Generated Projects
+
         </h1>
 
         <p>
+
           Browse all AI generated projects
+
         </p>
 
       </div>
@@ -124,20 +165,46 @@ function Projects() {
 
             {
 
-              projects.map(
-                (
-                  project
-                ) => (
+              projects.map(project => (
 
-                  <div
-                    key={project._id}
-                    className="project-card"
+                <div
+                  key={project._id}
+                  className="project-card"
+                >
+
+                  {/* Delete Button */}
+
+                  <button
+
+                    className="delete-project-btn"
+
+                    onClick={(e) => {
+
+                      e.preventDefault();
+
+                      e.stopPropagation();
+
+                      deleteProject(
+                        project._id
+                      );
+
+                    }}
+
                   >
 
-                    <Link
-                      to={`/projects/${project._id}`}
-                      className="project-card-link"
-                    >
+                    <Trash2
+                      size={16}
+                    />
+
+                  </button>
+
+                  <Link
+
+                    to={`/projects/${project._id}`}
+
+                    className="project-card-link"
+
+                  >
 
                     <h3>
 
@@ -167,18 +234,12 @@ function Projects() {
                     </p>
 
                     <div
-                      className="
-                      project-meta
-                      "
+                      className="project-meta"
                     >
 
                       <span>
 
-                        Iterations:
-
-                        {" "}
-
-                        {
+                        Iterations: {
 
                           project.iterations ||
 
@@ -210,20 +271,23 @@ function Projects() {
 
                     </small>
 
-                    </Link>
+                  </Link>
 
-                    <Link
-                      to={`/generate?projectId=${project.project_id}&executionId=${project._id}`}
-                      className="continue-link"
-                    >
-                      Continue →
-                    </Link>
+                  <Link
 
-                  </div>
+                    to={`/generate?projectId=${project.project_id}&executionId=${project._id}`}
 
-                )
+                    className="continue-link"
 
-              )
+                  >
+
+                    Continue →
+
+                  </Link>
+
+                </div>
+
+              ))
 
             }
 
@@ -232,6 +296,8 @@ function Projects() {
         )
 
       }
+
+      </div>
 
     </DashboardLayout>
 

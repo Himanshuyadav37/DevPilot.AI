@@ -123,17 +123,19 @@ nav{
 
   align-items:center;
 
-  gap:12px;
+  gap:14px;
 
-  padding:12px 14px;
+  padding:15px 16px;
 
-  border-radius:10px;
+  border-radius:12px;
 
   color:#b4b4b4;
 
-  transition:.2s;
+  transition:.25s ease;
 
-  font-size:14px;
+  font-size:15px;
+
+  font-weight:500;
 }
 
 .nav-item:hover{
@@ -237,17 +239,18 @@ nav{
   margin-bottom:12px;
 }
 
+
 .recent-header h4{
 
-  color:#737373;
+  color:#8f8f8f;
 
-  font-size:11px;
+  font-size:12px;
 
   text-transform:uppercase;
 
-  letter-spacing:1px;
+  letter-spacing:1.4px;
 
-  font-weight:600;
+  font-weight:700;
 }
 
 .chat-item{
@@ -351,7 +354,10 @@ nav{
 
 .workspace-section nav{
 
-  margin-top:12px;
+  margin-top:16px;
+
+  gap:10px;
+
 }
 
 .new-chat-btn{

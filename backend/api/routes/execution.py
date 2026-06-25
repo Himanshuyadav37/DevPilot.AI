@@ -14,6 +14,7 @@ from db.execution_service import (
     get_all_executions,
     get_execution_by_id,
     get_project_history,
+    delete_execution,
 )
 
 from db.project_version_service import (
@@ -31,6 +32,10 @@ from router.agent_router import (
 
 from agents.conversational import (
     conversational_agent
+)
+
+from agents.research.supervisor import (
+    run_research_agent
 )
 
 from auth.optional_auth import get_optional_user
@@ -69,10 +74,11 @@ def execute_project(
 
     elif selected_agent == "research":
 
-        return {
-            "agent": "research",
-            "message": "Coming Soon"
-        }
+        return run_research_agent(
+            prompt=request.idea,
+            session_id=request.conversation_id,
+            user_id=user_id,
+        )
 
     elif selected_agent == "education":
 
@@ -178,3 +184,29 @@ def execution_diff(
     )
     current_files = fixed or generated
     return compute_code_diff(other_files, current_files)
+
+
+@router.delete("/executions/{execution_id}")
+def delete_execution_route(
+    execution_id: str,
+    user=Depends(get_optional_user),
+):
+
+    deleted = delete_execution(
+        execution_id
+    )
+
+    if not deleted:
+
+        raise HTTPException(
+            status_code=404,
+            detail="Execution not found"
+        )
+
+    return {
+
+        "success": True,
+
+        "message": "Project deleted successfully"
+
+    }

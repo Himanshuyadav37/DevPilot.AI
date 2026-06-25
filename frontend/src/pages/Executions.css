@@ -309,6 +309,93 @@
     );
 }
 
+
+
+/* LIGHT MODE */
+
+body.light .executions-page {
+  color: #101828;
+}
+
+body.light .page-header h1 {
+  color: #0f172a;
+}
+
+body.light .page-header p {
+  color: #64748b;
+}
+
+body.light .refresh-btn {
+  background: #0f172a;
+  color: #ffffff;
+  box-shadow: 0 8px 18px rgba(15, 23, 42, 0.14);
+}
+
+body.light .refresh-btn:hover {
+  box-shadow: 0 10px 24px rgba(15, 23, 42, 0.18);
+}
+
+body.light .stat-card,
+body.light .card {
+  background: #ffffff;
+  border-color: #d9e5f2;
+  box-shadow: 0 12px 30px rgba(15, 23, 42, 0.05);
+}
+
+body.light .stat-card.success {
+  background: #f0fdf4;
+  border-color: #bbf7d0;
+}
+
+body.light .stat-card.danger {
+  background: #fef2f2;
+  border-color: #fecaca;
+}
+
+body.light .stat-card span,
+body.light .loading,
+body.light .empty-state {
+  color: #64748b;
+}
+
+body.light .stat-card h2,
+body.light .card-header h2 {
+  color: #0f172a;
+}
+
+body.light .execution-table table {
+  background: #ffffff;
+  color: #101828;
+}
+
+body.light .execution-table thead {
+  background: #f8fafc;
+}
+
+body.light .execution-table th {
+  color: #475467;
+  border-bottom-color: #dbe4ef;
+}
+
+body.light .execution-table td {
+  color: #101828;
+  border-bottom-color: #e7edf5;
+}
+
+body.light .execution-table tr:hover {
+  background: #f8fafc;
+}
+
+body.light .badge.success {
+  color: #166534;
+  background: #dcfce7;
+}
+
+body.light .badge.danger {
+  color: #b91c1c;
+  background: #fee2e2;
+}
+
 @media (
   max-width: 768px
 ) {

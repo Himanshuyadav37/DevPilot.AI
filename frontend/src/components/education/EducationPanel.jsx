@@ -1,4 +1,4 @@
-import GenericOutputPanel from "./GenericOutputPanel";
+import GenericOutputPanel from "../GenericOutputPanel.jsx";
 
 function EducationPanel({
 

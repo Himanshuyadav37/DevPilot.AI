@@ -43,7 +43,7 @@ function HeroSection() {
 
           </span>
 
-          👋
+          ??
 
         </h1>
 

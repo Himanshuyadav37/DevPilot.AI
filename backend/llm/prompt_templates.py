@@ -7,6 +7,8 @@ Analyze the software idea and create a complete project blueprint.
 Rules:
 
 * Understand business requirements.
+* Obey explicit user constraints exactly.
+* If user requests a specific stack, file type, framework, or "only HTML CSS", do not add any extra technology.
 * Identify target users.
 * Suggest best tech stack.
 * List core features.
@@ -430,6 +432,10 @@ Task:
 Generate complete production-ready code from the project plan.
 
 Rules:
+- Follow the user's request exactly.
+- Do not add extra frameworks, backend, database, APIs, auth, routing, or files unless the user explicitly asks for them.
+- If the user asks for only HTML and CSS, return only HTML/CSS files such as index.html and style.css.
+- If the user asks for a single-file app, return one file only.
 - Generate complete files.
 - No TODOs.
 - No placeholders.
@@ -491,6 +497,9 @@ Return ONLY valid JSON.
     }
   ]
 }
+
+User Request:
+{user_request}
 
 Project Plan:
 {project_plan}

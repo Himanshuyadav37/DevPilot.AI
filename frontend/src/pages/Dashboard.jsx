@@ -35,69 +35,58 @@ function Dashboard() {
 
           <div className="module active">
 
-            <div>
-              <h4>Engineer</h4>
-              <p>Multi-Agent Software Development</p>
-            </div>
+  <div>
+    <h4>Engineer</h4>
+    <p>Multi-Agent Software Development</p>
+  </div>
 
-            <strong>
-              ACTIVE
-            </strong>
+  <strong>ACTIVE</strong>
 
-          </div>
+</div>
 
-          <div className="module">
+<div className="module active">
 
-            <div>
-              <h4>Research</h4>
-              <p>Autonomous Research Agents</p>
-            </div>
+  <div>
+    <h4>Conversational</h4>
+    <p>AI Assistant Platform</p>
+  </div>
 
-            <strong>
-              SOON
-            </strong>
+  <strong>ACTIVE</strong>
 
-          </div>
+</div>
 
-          <div className="module">
+<div className="module">
 
-            <div>
-              <h4>Education</h4>
-              <p>Personal AI Tutor</p>
-            </div>
+  <div>
+    <h4>Research</h4>
+    <p>Autonomous Research Agents</p>
+  </div>
 
-            <strong>
-              SOON
-            </strong>
+  <strong>SOON</strong>
 
-          </div>
+</div>
 
-          <div className="module">
+<div className="module">
 
-            <div>
-              <h4>Automation</h4>
-              <p>Workflow Automation Engine</p>
-            </div>
+  <div>
+    <h4>Education</h4>
+    <p>Personal AI Tutor</p>
+  </div>
 
-            <strong>
-              SOON
-            </strong>
+  <strong>SOON</strong>
 
-          </div>
+</div>
 
-          <div className="module">
+<div className="module">
 
-            <div>
-              <h4>Conversational</h4>
-              <p>AI Assistant Platform</p>
-            </div>
+  <div>
+    <h4>Automation</h4>
+    <p>Workflow Automation Engine</p>
+  </div>
 
-            <strong>
-              SOON
-            </strong>
+  <strong>SOON</strong>
 
-          </div>
-
+</div>
         </div>
 
       </div>

@@ -2,6 +2,64 @@ import { useState } from "react";
 import Editor, { DiffEditor } from "@monaco-editor/react";
 import "./FileViewer.css";
 
+function formatHtml(code = "") {
+  if (!code.trim()) return code;
+
+  const lines = code
+    .replace(/></g, ">\n<")
+    .replace(/(<\/(?:html|head|body|div|section|main|header|footer|nav|ul|ol|li|p|h1|h2|h3|h4|button|a|form)>)/gi, "$1\n")
+    .replace(/(<(?:html|head|body|div|section|main|header|footer|nav|ul|ol|li|p|h1|h2|h3|h4|button|a|form)(?:\s[^>]*)?>)/gi, "\n$1")
+    .split("\n")
+    .map(line => line.trim())
+    .filter(Boolean);
+
+  let depth = 0;
+  return lines.map(line => {
+    if (/^<\//.test(line)) depth = Math.max(depth - 1, 0);
+    const formatted = `${"  ".repeat(depth)}${line}`;
+    if (/^<[^!/][^>]*[^/]>/i.test(line) && !/^<(area|base|br|col|embed|hr|img|input|link|meta|param|source|track|wbr)/i.test(line) && !line.includes(`</`)) {
+      depth += 1;
+    }
+    return formatted;
+  }).join("\n");
+}
+
+function formatCss(code = "") {
+  if (!code.trim()) return code;
+
+  let depth = 0;
+  return code
+    .replace(/\{/g, " {\n")
+    .replace(/;/g, ";\n")
+    .replace(/\}/g, "\n}\n")
+    .split("\n")
+    .map(line => line.trim())
+    .filter(Boolean)
+    .map(line => {
+      if (line === "}") depth = Math.max(depth - 1, 0);
+      const formatted = `${"  ".repeat(depth)}${line}`;
+      if (line.endsWith("{") || line.endsWith(" {")) depth += 1;
+      return formatted;
+    })
+    .join("\n");
+}
+
+function formatCodeForDisplay(path = "", code = "") {
+  const lowerPath = path.toLowerCase();
+
+  if (lowerPath.endsWith(".html")) return formatHtml(code);
+  if (lowerPath.endsWith(".css")) return formatCss(code);
+  if (lowerPath.endsWith(".json")) {
+    try {
+      return JSON.stringify(JSON.parse(code), null, 2);
+    } catch {
+      return code;
+    }
+  }
+
+  return code;
+}
+
 function FileViewer({ files = [], diffs = null, showDiffToggle = false }) {
 
   const [isFullscreen, setIsFullscreen] =
@@ -83,15 +141,8 @@ function FileViewer({ files = [], diffs = null, showDiffToggle = false }) {
 
   const activeDiff = selectedDiff || diffs?.[0];
 
-  console.log(
-    "ACTIVE FILE:",
-    activeFile
-  );
+  const editorTheme = "vs-dark";
 
-  console.log(
-    "ACTIVE FILE CODE:",
-    activeFile?.code
-  );
 
   return (
 
@@ -228,9 +279,9 @@ function FileViewer({ files = [], diffs = null, showDiffToggle = false }) {
               key={activeDiff.path}
               height="700px"
               language={getLanguage(activeDiff.path)}
-              theme="vs-dark"
-              original={activeDiff.before || ""}
-              modified={activeDiff.after || ""}
+              theme={editorTheme}
+              original={formatCodeForDisplay(activeDiff.path, activeDiff.before || "")}
+              modified={formatCodeForDisplay(activeDiff.path, activeDiff.after || "")}
               options={{
                 readOnly: true,
                 minimap: { enabled: false },
@@ -254,19 +305,12 @@ function FileViewer({ files = [], diffs = null, showDiffToggle = false }) {
               )
             }
 
-            theme="vs-dark"
+            theme={editorTheme}
 
             value={
-              activeFile?.code || ""
+              formatCodeForDisplay(activeFile?.path, activeFile?.code || "")
             }
 
-            onMount={() => {
-
-              console.log(
-                "MONACO LOADED"
-              );
-
-            }}
 
             options={{
 

@@ -16,6 +16,29 @@ def save_execution(data):
     )
 
 
+def update_execution(execution_id: str, data: dict):
+
+    try:
+
+        result = executions_collection.update_one(
+            {
+                "_id":
+                ObjectId(
+                    execution_id
+                )
+            },
+            {
+                "$set": data
+            }
+        )
+
+        return result.matched_count > 0
+
+    except Exception:
+
+        return False
+
+
 def get_all_executions():
 
     executions = list(
@@ -39,23 +62,42 @@ def get_all_executions():
 
 
 def get_execution_by_project_id(project_id: str):
+
     execution = executions_collection.find_one(
         {"project_id": project_id},
         sort=[("created_at", -1)],
     )
+
     if execution:
-        execution["_id"] = str(execution["_id"])
+
+        execution["_id"] = str(
+            execution["_id"]
+        )
+
     return execution
 
 
 def get_project_history(project_id: str):
+
     executions = list(
-        executions_collection.find({"project_id": project_id}).sort(
-            "created_at", -1
+
+        executions_collection.find(
+            {
+                "project_id": project_id
+            }
+        ).sort(
+            "created_at",
+            -1
         )
+
     )
+
     for execution in executions:
-        execution["_id"] = str(execution["_id"])
+
+        execution["_id"] = str(
+            execution["_id"]
+        )
+
     return executions
 
 
@@ -65,15 +107,13 @@ def get_execution_by_id(
 
     try:
 
-        execution = (
-            executions_collection.find_one(
-                {
-                    "_id":
-                        ObjectId(
-                            execution_id
-                        )
-                }
-            )
+        execution = executions_collection.find_one(
+            {
+                "_id":
+                ObjectId(
+                    execution_id
+                )
+            }
         )
 
     except Exception:
@@ -89,26 +129,26 @@ def get_execution_by_id(
     return execution
 
 
+# ============================
+# DELETE EXECUTION
+# ============================
+
 def delete_execution(
     execution_id: str
 ):
 
     try:
 
-        result = (
-            executions_collection.delete_one(
-                {
-                    "_id":
-                        ObjectId(
-                            execution_id
-                        )
-                }
-            )
+        result = executions_collection.delete_one(
+            {
+                "_id":
+                ObjectId(
+                    execution_id
+                )
+            }
         )
 
-        return (
-            result.deleted_count > 0
-        )
+        return result.deleted_count > 0
 
     except Exception:
 
@@ -125,7 +165,7 @@ def get_user_executions(
         .find(
             {
                 "user_id":
-                    user_id
+                user_id
             }
         )
         .sort(
@@ -150,15 +190,13 @@ def execution_exists(
 
     try:
 
-        execution = (
-            executions_collection.find_one(
-                {
-                    "_id":
-                        ObjectId(
-                            execution_id
-                        )
-                }
-            )
+        execution = executions_collection.find_one(
+            {
+                "_id":
+                ObjectId(
+                    execution_id
+                )
+            }
         )
 
         return execution is not None

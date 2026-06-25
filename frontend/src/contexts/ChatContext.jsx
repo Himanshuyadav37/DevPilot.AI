@@ -3,7 +3,9 @@ import {
   useContext,
   useState
 } from "react";
+
 import api from "../services/api";
+
 const ChatContext =
   createContext();
 
@@ -22,9 +24,9 @@ export function ChatProvider({
   ] = useState([]);
 
   const [
-  selectedConversation,
-  setSelectedConversation
-] = useState(null);
+    selectedConversation,
+    setSelectedConversation
+  ] = useState(null);
 
   const [
     currentAgent,
@@ -32,6 +34,27 @@ export function ChatProvider({
   ] = useState(
     "conversational"
   );
+
+  /* ===========================
+     Global Refresh
+  =========================== */
+
+  const [
+    refreshKey,
+    setRefreshKey
+  ] = useState(0);
+
+  function refreshApp() {
+
+    setRefreshKey(
+      prev => prev + 1
+    );
+
+  }
+
+  /* ===========================
+     New Chat
+  =========================== */
 
   function newChat() {
 
@@ -41,49 +64,58 @@ export function ChatProvider({
 
     setMessages([]);
 
-  }
-  async function loadConversation(
-  id
-) {
-
-  try {
-
-    const response =
-      await api.get(
-        `/conversations/${id}`
-      );
-
-    setConversationId(
-  id
-);
-
-console.log(
-  response.data
-);
-
-setCurrentAgent(
-  response.data.agent_type
-);
-
-setSelectedConversation(
-  response.data
-);
-
-setMessages(
-  response.data.messages || []
-);
-
-  }
-
-  catch(error){
-
-    console.error(
-      error
+    setSelectedConversation(
+      null
     );
 
   }
 
-}
+  /* ===========================
+     Load Conversation
+  =========================== */
+
+  async function loadConversation(
+    id
+  ) {
+
+    try {
+
+      const response =
+        await api.get(
+          `/conversations/${id}`
+        );
+
+      console.log(
+        response.data
+      );
+
+      setConversationId(
+        id
+      );
+
+      setCurrentAgent(
+        response.data.agent_type
+      );
+
+      setSelectedConversation(
+        response.data
+      );
+
+      setMessages(
+        response.data.messages || []
+      );
+
+    }
+
+    catch (error) {
+
+      console.error(
+        error
+      );
+
+    }
+
+  }
 
   return (
 
@@ -91,27 +123,31 @@ setMessages(
 
       value={{
 
-  conversationId,
+        conversationId,
 
-  setConversationId,
+        setConversationId,
 
-  messages,
+        messages,
 
-setMessages,
+        setMessages,
 
-selectedConversation,
+        selectedConversation,
 
-setSelectedConversation,
+        setSelectedConversation,
 
-  currentAgent,
+        currentAgent,
 
-  setCurrentAgent,
+        setCurrentAgent,
 
-  newChat,
+        refreshKey,
 
-  loadConversation
+        refreshApp,
 
-}}
+        newChat,
+
+        loadConversation
+
+      }}
 
     >
 

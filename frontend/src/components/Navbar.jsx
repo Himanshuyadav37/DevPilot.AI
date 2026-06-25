@@ -2,21 +2,36 @@ import {
   Bell,
   Search
 } from "lucide-react";
-import "./Navbar.css"
+
+import "./Navbar.css";
+
 function Navbar() {
+
+  const hour = new Date().getHours();
+
+  const greeting =
+    hour < 12
+      ? "Good Morning"
+      : hour < 18
+      ? "Good Afternoon"
+      : "Good Evening";
 
   return (
 
-    <div className="navbar">
+    <header className="navbar">
 
-      <div>
+      <div className="navbar-left">
 
         <h2 className="welcome">
-          Welcome Back 👋
+
+          {greeting} 👋
+
         </h2>
 
         <p className="subtitle">
-          Build amazing software with AI
+
+          Welcome to NeuroForge AI Operating System
+
         </p>
 
       </div>
@@ -25,26 +40,32 @@ function Navbar() {
 
         <div className="search-box">
 
-          <Search size={18} />
+          <Search size={18}/>
 
           <input
+
             type="text"
+
             placeholder="Search projects..."
+
           />
 
         </div>
 
         <button className="icon-btn">
-          <Bell size={18} />
-        </button>
 
-       
+          <Bell size={18}/>
+
+          <span className="notification-dot"></span>
+
+        </button>
 
       </div>
 
-    </div>
+    </header>
 
   );
+
 }
 
 export default Navbar;

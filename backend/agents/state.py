@@ -28,3 +28,7 @@ class AgentState(TypedDict):
     agent_notes: List[str]
 
     execution_steps: List[Dict]
+
+    mode: str
+
+    parent_execution_id: str

@@ -1,4 +1,4 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends
 from bson import ObjectId
 from db.mongo_client import (
     conversations_collection
@@ -8,13 +8,15 @@ from db.conversation_service import (
     get_conversation_by_id
 )
 
+from auth.optional_auth import get_optional_user
+
 router = APIRouter()
 
 
 @router.get("/")
-def get_conversations():
+def get_conversations(user=Depends(get_optional_user)):
 
-    return get_all_conversations()
+    return get_all_conversations(user.get("sub") if user.get("sub") != "system" else None)
 
 
 @router.get("/{conversation_id}")

@@ -129,21 +129,15 @@ function Projects() {
                   project
                 ) => (
 
-                  <Link
-
-                    key={
-                      project._id
-                    }
-
-                    to={
-                      `/projects/${project._id}`
-                    }
-
-                    className="
-                    project-card
-                    "
-
+                  <div
+                    key={project._id}
+                    className="project-card"
                   >
+
+                    <Link
+                      to={`/projects/${project._id}`}
+                      className="project-card-link"
+                    >
 
                     <h3>
 
@@ -216,7 +210,16 @@ function Projects() {
 
                     </small>
 
-                  </Link>
+                    </Link>
+
+                    <Link
+                      to={`/generate?projectId=${project.project_id}&executionId=${project._id}`}
+                      className="continue-link"
+                    >
+                      Continue →
+                    </Link>
+
+                  </div>
 
                 )
 

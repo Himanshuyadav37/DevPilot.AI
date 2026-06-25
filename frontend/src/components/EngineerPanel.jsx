@@ -1,10 +1,28 @@
+import { useEffect, useState } from "react";
 import FileViewer from "./FileViewer";
+import api from "../services/api";
 
 function EngineerPanel({
 
   result
 
 }) {
+
+  const [diffs, setDiffs] = useState([]);
+
+  useEffect(() => {
+    if (!result?.execution_id) return;
+
+    const hasFixed = result?.fixed_code?.files?.length > 0;
+    const hasGenerated = result?.generated_code?.files?.length > 0;
+
+    if (hasFixed && hasGenerated) {
+      api
+        .get(`/ai/executions/${result.execution_id}/diff?compare=fixed`)
+        .then(res => setDiffs(res.data || []))
+        .catch(() => setDiffs([]));
+    }
+  }, [result?.execution_id]);
 
   if (!result) return null;
 
@@ -421,6 +439,10 @@ function EngineerPanel({
             <FileViewer
 
               files={files}
+
+              diffs={diffs}
+
+              showDiffToggle={diffs.length > 0}
 
             />
 

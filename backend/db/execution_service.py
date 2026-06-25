@@ -38,6 +38,27 @@ def get_all_executions():
     return executions
 
 
+def get_execution_by_project_id(project_id: str):
+    execution = executions_collection.find_one(
+        {"project_id": project_id},
+        sort=[("created_at", -1)],
+    )
+    if execution:
+        execution["_id"] = str(execution["_id"])
+    return execution
+
+
+def get_project_history(project_id: str):
+    executions = list(
+        executions_collection.find({"project_id": project_id}).sort(
+            "created_at", -1
+        )
+    )
+    for execution in executions:
+        execution["_id"] = str(execution["_id"])
+    return executions
+
+
 def get_execution_by_id(
     execution_id: str
 ):

@@ -22,6 +22,10 @@ from api.routes.settings import (
     router as settings_router
 )
 
+from api.routes.user_memory import (
+    router as user_memory_router
+)
+
 from api.routes import (
     conversations
 )
@@ -116,4 +120,10 @@ app.include_router(
     conversations.router,
     prefix="/conversations",
     tags=["Conversations"]
+)
+
+app.include_router(
+    user_memory_router,
+    prefix="/memory/user",
+    tags=["User Memory"]
 )

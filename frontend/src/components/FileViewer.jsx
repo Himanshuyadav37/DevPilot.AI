@@ -1,11 +1,13 @@
 import { useState } from "react";
-import Editor from "@monaco-editor/react";
+import Editor, { DiffEditor } from "@monaco-editor/react";
 import "./FileViewer.css";
 
-function FileViewer({ files = [] }) {
+function FileViewer({ files = [], diffs = null, showDiffToggle = false }) {
 
   const [isFullscreen, setIsFullscreen] =
     useState(false);
+
+  const [viewMode, setViewMode] = useState("code");
 
   const [selectedFile, setSelectedFile] =
     useState(
@@ -13,6 +15,10 @@ function FileViewer({ files = [] }) {
         ? files[0]
         : null
     );
+
+  const [selectedDiff, setSelectedDiff] = useState(
+    diffs?.length > 0 ? diffs[0] : null
+  );
 
   function getLanguage(path) {
 
@@ -51,6 +57,8 @@ function FileViewer({ files = [] }) {
 
   if (!files || files.length === 0) {
 
+    if (!diffs || diffs.length === 0) {
+
     return (
 
       <div
@@ -66,10 +74,14 @@ function FileViewer({ files = [] }) {
 
     );
 
+    }
+
   }
 
   const activeFile =
     selectedFile || files[0];
+
+  const activeDiff = selectedDiff || diffs?.[0];
 
   console.log(
     "ACTIVE FILE:",
@@ -96,16 +108,50 @@ function FileViewer({ files = [] }) {
         <div className="file-sidebar-header">
 
           <h3>
-            Generated Files
+            {viewMode === "diff" ? "Code Changes" : "Generated Files"}
           </h3>
 
           <span>
-            {files.length} files
+            {viewMode === "diff"
+              ? `${diffs?.length || 0} changes`
+              : `${files.length} files`}
           </span>
 
         </div>
 
-        {
+        {showDiffToggle && diffs?.length > 0 && (
+          <div style={{ padding: "8px 12px", display: "flex", gap: "8px" }}>
+            <button
+              className={viewMode === "code" ? "action-btn active" : "action-btn"}
+              onClick={() => setViewMode("code")}
+            >
+              Code
+            </button>
+            <button
+              className={viewMode === "diff" ? "action-btn active" : "action-btn"}
+              onClick={() => setViewMode("diff")}
+            >
+              Diff
+            </button>
+          </div>
+        )}
+
+        {viewMode === "diff" && diffs?.map((diff) => (
+          <div
+            key={diff.path}
+            className={
+              activeDiff?.path === diff.path
+                ? "file-item active"
+                : "file-item"
+            }
+            onClick={() => setSelectedDiff(diff)}
+          >
+            {diff.status === "added" ? "➕" : diff.status === "removed" ? "➖" : "📝"}{" "}
+            {diff.path}
+          </div>
+        ))}
+
+        {viewMode === "code" &&
 
           files.map((file) => (
 
@@ -142,7 +188,9 @@ function FileViewer({ files = [] }) {
 
           <span className="file-name">
 
-            {activeFile?.path}
+            {viewMode === "diff"
+              ? activeDiff?.path
+              : activeFile?.path}
 
           </span>
 
@@ -175,6 +223,23 @@ function FileViewer({ files = [] }) {
           }}
         >
 
+          {viewMode === "diff" && activeDiff ? (
+            <DiffEditor
+              key={activeDiff.path}
+              height="700px"
+              language={getLanguage(activeDiff.path)}
+              theme="vs-dark"
+              original={activeDiff.before || ""}
+              modified={activeDiff.after || ""}
+              options={{
+                readOnly: true,
+                minimap: { enabled: false },
+                automaticLayout: true,
+                wordWrap: "on",
+                renderSideBySide: true,
+              }}
+            />
+          ) : (
           <Editor
 
             key={
@@ -222,6 +287,7 @@ function FileViewer({ files = [] }) {
             }}
 
           />
+          )}
 
         </div>
 

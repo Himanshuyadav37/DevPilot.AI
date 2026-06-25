@@ -4,7 +4,8 @@ import {
 } from "react";
 
 import {
-  useParams
+  useParams,
+  Link
 } from "react-router-dom";
 
 import DashboardLayout from "../layouts/DashboardLayout";
@@ -13,6 +14,8 @@ import FileViewer from "../components/FileViewer";
 import {
   getExecution
 } from "../services/projectService";
+
+import api from "../services/api";
 
 import "./ProjectDetails.css";
 
@@ -28,6 +31,9 @@ function ProjectDetails() {
 
   const [error, setError] =
     useState("");
+
+  const [versions, setVersions] = useState([]);
+  const [diffs, setDiffs] = useState([]);
 
   const loadProject = async () => {
 
@@ -58,6 +64,22 @@ function ProjectDetails() {
       }
 
       setProject(data);
+
+      if (data.project_id) {
+        const versionsRes = await api.get(
+          `/ai/projects/${data.project_id}/versions`
+        );
+        setVersions(versionsRes.data || []);
+      }
+
+      const hasFixed = data.fixed_code?.files?.length > 0;
+      const hasGenerated = data.generated_code?.files?.length > 0;
+      if (hasFixed && hasGenerated) {
+        const diffRes = await api.get(
+          `/ai/executions/${id}/diff?compare=fixed`
+        );
+        setDiffs(diffRes.data || []);
+      }
 
     }
 
@@ -294,6 +316,14 @@ console.log(
 
           </a>
 
+          <Link
+            to={`/generate?projectId=${project.project_id}&executionId=${project._id}`}
+            className="download-btn"
+            style={{ marginLeft: "12px" }}
+          >
+            ▶ Continue Development
+          </Link>
+
         </div>
 
         <div className="stats-grid">
@@ -368,6 +398,29 @@ console.log(
           </p>
 
         </div>
+
+        {
+
+          versions.length > 0 && (
+
+            <div className="card">
+
+              <h2>Version History</h2>
+
+              {versions.map(v => (
+                <div key={v._id} className="timeline-item">
+                  v{v.version} — {v.idea?.slice(0, 80)}
+                  {v.created_at && (
+                    <small> ({new Date(v.created_at).toLocaleString()})</small>
+                  )}
+                </div>
+              ))}
+
+            </div>
+
+          )
+
+        }
 
         {
 
@@ -630,6 +683,8 @@ console.log(
       ? files
       : []
   }
+  diffs={diffs}
+  showDiffToggle={diffs.length > 0}
 />
 
     </div>

@@ -19,15 +19,62 @@
 
 .logo{
 
-  display:flex;
+    display:flex;
 
-  align-items:center;
+    align-items:center;
 
-  gap:12px;
+    gap:12px;
 
-  padding-bottom:24px;
+    padding-bottom:22px;
 
-  border-bottom:1px solid #2a2a2a;
+    border-bottom:1px solid #2a2a2a;
+
+}
+
+.logo-image{
+
+    width:48px;
+
+    height:48px;
+
+    object-fit:contain;
+
+    border-radius:12px;
+
+    flex-shrink:0;
+
+}
+
+.logo-text{
+
+    display:flex;
+
+    flex-direction:column;
+
+}
+
+.logo h2{
+
+    color:white;
+
+    font-size:20px;
+
+    font-weight:700;
+
+    line-height:1.1;
+
+    margin:0;
+
+}
+
+.logo p{
+
+    color:#8b8b8b;
+
+    font-size:12px;
+
+    margin-top:3px;
+
 }
 
 .logo-circle{

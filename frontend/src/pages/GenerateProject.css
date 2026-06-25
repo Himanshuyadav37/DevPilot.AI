@@ -1,433 +1,474 @@
-.generate-page{
-  display:flex;
-  flex-direction:column;
-  gap:24px;
+
+/* ==========================================================================
+   1. WORKSPACE PAGE LAYOUT & ANIMATION
+   ========================================================================== */
+
+.workspace-page {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  padding-bottom: 20px;
+  animation: fadeIn 0.3s ease;
 }
 
-/* ========================= */
-/* INPUT SECTION */
-/* ========================= */
-
-.generate-card{
-  background:#171717;
-  border:1px solid #2a2a2a;
-  border-radius:16px;
-  padding:32px;
-}
-
-.generate-card h1{
-  color:#ffffff;
-  font-size:32px;
-  font-weight:700;
-  margin-bottom:10px;
-}
-
-.generate-card p{
-  color:#9ca3af;
-  font-size:14px;
-  margin-bottom:20px;
-}
-
-.generate-card textarea{
-  width:100%;
-  height:180px;
-
-  resize:none;
-
-  background:#212121;
-
-  border:1px solid #333333;
-
-  border-radius:12px;
-
-  color:#ffffff;
-
-  padding:18px;
-
-  font-size:15px;
-
-  transition:.2s;
-}
-
-.generate-card textarea:focus{
-  border-color:#525252;
-  box-shadow:none;
-}
-
-.generate-card button{
-  margin-top:20px;
-
-  background:#ffffff;
-
-  color:#000000;
-
-  border:none;
-
-  padding:12px 18px;
-
-  border-radius:10px;
-
-  font-weight:600;
-
-  transition:.2s;
-}
-
-.generate-card button:hover{
-  opacity:.9;
-}
-
-/* ========================= */
-/* OUTPUT SECTION */
-/* ========================= */
-
-.output-card{
-  background:#171717;
-
-  border:1px solid #2a2a2a;
-
-  border-radius:16px;
-
-  padding:28px;
-}
-
-.output-card h2{
-  color:#ffffff;
-  margin-bottom:24px;
-}
-
-/* ========================= */
-/* STATS */
-/* ========================= */
-
-.result-grid{
-  display:grid;
-
-  grid-template-columns:
-  repeat(3,1fr);
-
-  gap:16px;
-
-  margin-bottom:24px;
-}
-
-.result-box{
-  background:#212121;
-
-  border:1px solid #2f2f2f;
-
-  border-radius:12px;
-
-  padding:20px;
-}
-
-.result-box span{
-  color:#9ca3af;
-  font-size:13px;
-}
-
-.result-box h3{
-  color:white;
-  font-size:22px;
-  margin-top:10px;
-}
-
-/* ========================= */
-/* DOWNLOAD */
-/* ========================= */
-
-.download-btn{
-  display:inline-flex;
-
-  align-items:center;
-
-  justify-content:center;
-
-  padding:12px 20px;
-
-  border-radius:10px;
-
-  background:#ffffff;
-
-  color:#000000;
-
-  text-decoration:none;
-
-  font-weight:600;
-
-  transition:.2s;
-}
-
-.download-btn:hover{
-  opacity:.9;
-}
-
-/* ========================= */
-/* CONTENT SECTIONS */
-/* ========================= */
-
-.section{
-  margin-top:30px;
-}
-
-.section h3{
-  color:white;
-  margin-bottom:14px;
-}
-
-.section p{
-  color:#d4d4d4;
-  line-height:1.8;
-}
-
-.section ul{
-  padding-left:18px;
-}
-
-.section li{
-  color:#d4d4d4;
-  margin-bottom:10px;
-}
-
-/* ========================= */
-/* TECH STACK */
-/* ========================= */
-
-.chips{
-  display:flex;
-  flex-wrap:wrap;
-  gap:10px;
-}
-
-.chip{
-  background:#262626;
-
-  border:1px solid #3a3a3a;
-
-  color:#d4d4d4;
-
-  border-radius:999px;
-
-  padding:8px 14px;
-
-  font-size:13px;
-}
-
-/* ========================= */
-/* TIMELINE */
-/* ========================= */
-
-.execution-timeline{
-  background:#212121;
-
-  border:1px solid #2f2f2f;
-
-  border-radius:12px;
-
-  padding:20px;
-
-  max-height:500px;
-
-  overflow-y:auto;
-}
-
-.timeline-item{
-  display:flex;
-
-  gap:16px;
-
-  padding:14px 0;
-
-  border-bottom:1px solid #2a2a2a;
-}
-
-.timeline-item:last-child{
-  border-bottom:none;
-}
-
-.timeline-time{
-  width:90px;
-
-  color:#737373;
-
-  font-size:12px;
-}
-
-.timeline-content{
-  flex:1;
-}
-
-.timeline-message{
-  color:#ffffff;
-  font-size:14px;
-}
-
-.timeline-details{
-  margin-top:6px;
-
-  color:#a3a3a3;
-
-  font-size:12px;
-}
-
-/* ========================= */
-/* STATUS BADGES */
-/* ========================= */
-
-.badge{
-  display:inline-flex;
-
-  align-items:center;
-
-  justify-content:center;
-
-  padding:4px 10px;
-
-  border-radius:999px;
-
-  font-size:11px;
-
-  font-weight:600;
-}
-
-.badge.completed{
-  background:#16351f;
-  color:#22c55e;
-}
-
-.badge.running{
-  background:#2a2a2a;
-  color:#d4d4d4;
-}
-
-.badge.failed{
-  background:#3b1818;
-  color:#ef4444;
-}
-
-/* ========================= */
-/* DEBUG REPORT */
-/* ========================= */
-
-.debug-box{
-  margin-top:12px;
-
-  padding:18px;
-
-  background:#212121;
-
-  border:1px solid #2f2f2f;
-
-  border-radius:12px;
-
-  color:#d4d4d4;
-
-  line-height:1.8;
-}
-
-/* ========================= */
-/* RESPONSIVE */
-/* ========================= */
-
-@media(max-width:900px){
-
-  .result-grid{
-    grid-template-columns:1fr;
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
   }
-
-  .generate-card{
-    padding:24px;
-  }
-
-  .output-card{
-    padding:20px;
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 
+/* ==========================================================================
+   2. HEADER (TOP BAR) & METADATA
+   ========================================================================== */
 
-
-
-.agent-selector{
-  display:flex;
-  flex-direction:column;
-  gap:8px;
-  margin-bottom:20px;
+.workspace-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 20px 22px;
+  background: #171717;
+  border: 1px solid #2a2a2a;
+  border-radius: 16px;
 }
 
-.agent-selector label{
-  color:#a3a3a3;
-  font-size:14px;
-  font-weight:500;
+.workspace-header h1 {
+  color: #ffffff;
+  font-size: 26px;
+  font-weight: 700;
+  margin-top: 6px;
 }
 
-.agent-selector select{
-  background:#212121;
-  border:1px solid #333333;
-  color:#ffffff;
-  padding:12px;
-  border-radius:10px;
-  font-size:14px;
-  outline:none;
+.workspace-header p {
+  color: #9ca3af;
+  font-size: 14px;
+  margin-top: 6px;
+  max-width: 600px;
 }
 
-.agent-selector select:focus{
-  border-color:#7c3aed;
+/* Badge Layouts */
+.workspace-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: #202020;
+  border: 1px solid #2f2f2f;
+  padding: 6px 12px;
+  border-radius: 999px;
+  color: #d4d4d4;
+  font-size: 12px;
 }
 
-
-
-
-.agent-modes{
-  display:flex;
-  flex-wrap:wrap;
-  gap:10px;
-  margin-bottom:20px;
+.workspace-status {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #22c55e;
+  font-size: 13px;
+  padding: 6px 12px;
+  background: #0f1a14;
+  border: 1px solid #1f3d2a;
+  border-radius: 999px;
 }
 
-.mode-btn{
-  background:#212121;
-  border:1px solid #2f2f2f;
-  color:#d4d4d4;
-  padding:10px 16px;
-  border-radius:12px;
-  cursor:pointer;
-  transition:.2s;
-  font-size:14px;
+/* Continue State Banner */
+.continue-banner {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  border-radius: 10px;
+  background: #1e3a5f20;
+  border: 1px solid #2b5aa0;
+  color: #93c5fd;
+  font-size: 13px;
 }
 
-.mode-btn:hover{
-  border-color:#4b5563;
+/* ==========================================================================
+   3. INPUT MODULE & AGENT UTILITIES
+   ========================================================================== */
+
+.workspace-card {
+  background: #171717;
+  border: 1px solid #2a2a2a;
+  border-radius: 16px;
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
 }
 
-.mode-btn.active{
-  background:#7c3aed15;
-  border:1px solid #7c3aed;
-  color:#ffffff;
+.agent-selector {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 
-
-.chat-container{
-  display:flex;
-  flex-direction:column;
-  gap:16px;
+.agent-selector label {
+  color: #9ca3af;
+  font-size: 13px;
 }
 
-.user-message{
-  align-self:flex-end;
-  max-width:75%;
-  background:#7c3aed;
-  color:#ffffff;
-  padding:14px;
-  border-radius:16px;
-  white-space:pre-wrap;
+/* Pills Container */
+.agent-modes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
 }
 
-.assistant-message{
-  align-self:flex-start;
-  max-width:75%;
-  background:#212121;
-  border:1px solid #2f2f2f;
-  color:#ffffff;
-  padding:14px;
-  border-radius:16px;
-  white-space:pre-wrap;
+.mode-btn {
+  padding: 8px 14px;
+  border-radius: 999px;
+  background: #212121;
+  border: 1px solid #2f2f2f;
+  color: #d4d4d4;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.mode-btn:hover {
+  border-color: #444;
+  transform: translateY(-1px);
+}
+
+.mode-btn.active {
+  background: #ffffff10;
+  border-color: #ffffff;
+  color: #ffffff;
+}
+
+/* Text Editor Layout */
+.chat-input-container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.chat-input-container textarea {
+  width: 100%;
+  min-height: 120px;
+  padding: 14px;
+  border-radius: 14px;
+  background: #212121;
+  border: 1px solid #2f2f2f;
+  color: #ffffff;
+  font-size: 14px;
+  resize: none;
+  outline: none;
+  transition: 0.2s;
+}
+
+.chat-input-container textarea:focus {
+  border-color: #555;
+}
+
+.chat-input-container button {
+  align-self: flex-end;
+  padding: 10px 16px;
+  border-radius: 10px;
+  background: #ffffff;
+  color: #000000;
+  border: none;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.chat-input-container button:hover {
+  opacity: 0.9;
+}
+
+/* ==========================================================================
+   4. OUTPUT CONTAINER & CORE BLOCKS
+   ========================================================================== */
+
+.workspace-output {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.output-card {
+  background: #171717;
+  border: 1px solid #2a2a2a;
+  border-radius: 16px;
+  padding: 22px;
+}
+
+.output-card:hover {
+  border-color: #3a3a3a;
+}
+
+.output-card h2 {
+  color: #ffffff;
+  font-size: 18px;
+  margin-bottom: 16px;
+}
+
+/* Empty Framework Viewport */
+.empty-state {
+  text-align: center;
+  padding: 40px 20px;
+  background: #171717;
+  border: 1px solid #2a2a2a;
+  border-radius: 16px;
+}
+
+.empty-icon {
+  color: #9ca3af;
+  margin-bottom: 12px;
+}
+
+.empty-state h2 {
+  color: #ffffff;
+  font-size: 20px;
+  margin-bottom: 8px;
+}
+
+.empty-state p {
+  color: #9ca3af;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+/* Progress Spinner Frame */
+.loading-card {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 18px;
+  background: #171717;
+  border: 1px solid #2a2a2a;
+  border-radius: 16px;
+}
+
+.loading-spinner {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: 2px solid #333333;
+  border-top-color: #ffffff;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  100% { transform: rotate(360deg); }
+}
+
+/* ==========================================================================
+   5. ENGINEER DASHBOARD STRUCTS (GRIDS & LOGS)
+   ========================================================================== */
+
+.result-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+
+.result-box {
+  background: #212121;
+  border: 1px solid #2f2f2f;
+  border-radius: 12px;
+  padding: 14px;
+}
+
+.result-box span {
+  color: #9ca3af;
+  font-size: 12px;
+}
+
+.result-box h3 {
+  color: #ffffff;
+  font-size: 18px;
+  margin-top: 6px;
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.chip {
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: #262626;
+  border: 1px solid #3a3a3a;
+  color: #d4d4d4;
+  font-size: 12px;
+}
+
+.download-btn {
+  display: inline-flex;
+  align-items: center;
+  padding: 10px 14px;
+  border-radius: 10px;
+  background: #ffffff;
+  color: #000000;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.download-btn:hover {
+  opacity: 0.9;
+}
+
+/* Event Tracker Feed */
+.execution-timeline {
+  background: #212121;
+  border: 1px solid #2f2f2f;
+  border-radius: 12px;
+  padding: 14px;
+  max-height: 420px;
+  overflow-y: auto;
+}
+
+.timeline-item {
+  display: flex;
+  gap: 12px;
+  padding: 12px 0;
+  border-bottom: 1px solid #2a2a2a;
+}
+
+.timeline-item:last-child {
+  border-bottom: none;
+}
+
+.timeline-time {
+  width: 80px;
+  color: #737373;
+  font-size: 11px;
+}
+
+.timeline-content {
+  flex: 1;
+}
+
+.timeline-message {
+  color: #ffffff;
+  font-size: 13px;
+}
+
+.timeline-details {
+  margin-top: 6px;
+  color: #a3a3a3;
+  font-size: 12px;
+}
+
+/* State Diagnostics Indicators */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 8px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.badge.completed {
+  background: #16351f;
+  color: #22c55e;
+}
+
+.badge.running {
+  background: #2a2a2a;
+  color: #d4d4d4;
+}
+
+.badge.failed {
+  background: #3b1818;
+  color: #ef4444;
+}
+
+.debug-box {
+  background: #212121;
+  border: 1px solid #2f2f2f;
+  padding: 14px;
+  border-radius: 12px;
+  color: #d4d4d4;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+/* ==========================================================================
+   6. CONVERSATION INTERACTION CHANNELS
+   ========================================================================== */
+
+.chat-container {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 10px;
+}
+
+.chat-container::-webkit-scrollbar {
+  width: 6px;
+}
+
+.chat-container::-webkit-scrollbar-thumb {
+  background: #2a2a2a;
+  border-radius: 10px;
+}
+
+/* Messaging Nodes */
+.user-message {
+  align-self: flex-end;
+  max-width: 75%;
+  background: #ffffff10;
+  border: 1px solid #2f2f2f;
+  color: #ffffff;
+  padding: 12px 14px;
+  border-radius: 14px;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.assistant-message {
+  align-self: flex-start;
+  max-width: 75%;
+  background: #212121;
+  border: 1px solid #2f2f2f;
+  color: #e5e5e5;
+  padding: 12px 14px;
+  border-radius: 14px;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+/* ==========================================================================
+   7. GLOBAL RESPONSIVE MEDIA QUERIES & UTILS
+   ========================================================================== */
+
+.mode-btn,
+.download-btn,
+.generate-card button,
+.output-card {
+  transition: all 0.2s ease;
+}
+
+@media (max-width: 900px) {
+  .workspace-header {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .result-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .user-message,
+  .assistant-message {
+    max-width: 90%;
+  }
+
+  .workspace-card {
+    padding: 14px;
+  }
+
+  .execution-timeline {
+    max-height: 300px;
+  }
 }

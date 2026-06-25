@@ -11,7 +11,8 @@ from llm.prompt_templates import (
 )
 
 from memory.project_memory import (
-    save_memory
+    save_memory,
+    format_project_memory,
 )
 
 
@@ -38,6 +39,33 @@ def coder_agent(state):
             indent=2
         )
     )
+
+    project_id = state.get("project_id")
+    if project_id:
+        memory_context = format_project_memory(project_id)
+        if memory_context:
+            prompt = f"{prompt}\n\n{memory_context}"
+
+    if state.get("mode") == "continue":
+        existing = (
+            state.get("fixed_code")
+            or state.get("generated_code")
+            or {}
+        )
+        if existing:
+            prompt = (
+                f"{prompt}\n\n"
+                f"EXISTING CODE (update and extend, do not rewrite from scratch):\n"
+                f"{json.dumps(existing, indent=2)}\n\n"
+                f"NEW REQUEST:\n{state.get('idea', '')}"
+            )
+            state["execution_steps"].append({
+                "agent": "coder",
+                "step": "continue_development",
+                "status": "in_progress",
+                "message": "Continuing development on existing codebase",
+                "timestamp": datetime.utcnow().isoformat(),
+            })
 
     # Add step: Generating code
     state["execution_steps"].append({

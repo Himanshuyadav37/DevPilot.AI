@@ -1,5 +1,4 @@
 import "./StatCard.css";
-
 function StatCard({
   title,
   value,

@@ -21,6 +21,8 @@ def create_conversation(
 
         "messages": [],
 
+        "summary": "",
+
         "created_at": datetime.utcnow(),
 
         "updated_at": datetime.utcnow()
@@ -101,12 +103,35 @@ def get_conversation(
     return conversation
 
 
-def get_all_conversations():
+def get_conversation_messages(conversation_id: str) -> list:
+    conversation = get_conversation(conversation_id)
+    if not conversation:
+        return []
+    return conversation.get("messages", [])
+
+
+def update_conversation_summary(conversation_id: str, summary: str):
+    conversations_collection.update_one(
+        {"_id": ObjectId(conversation_id)},
+        {
+            "$set": {
+                "summary": summary,
+                "updated_at": datetime.utcnow(),
+            }
+        },
+    )
+
+
+def get_all_conversations(user_id: str | None = None):
+
+    query = {}
+    if user_id:
+        query["user_id"] = user_id
 
     conversations = list(
 
         conversations_collection.find(
-            {},
+            query,
             {
                 "messages": 0
             }

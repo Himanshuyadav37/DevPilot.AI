@@ -1,3 +1,4 @@
+import logo from "./logo.png";
 import {
   LayoutDashboard,
   FolderGit2,
@@ -185,23 +186,25 @@ deleteChat(id) {
 
       <div className="logo">
 
-        <div
-          className="logo-circle"
-        />
+  <img
+    src={logo}
+    alt="NeuroForge"
+    className="logo-image"
+  />
 
-        <div>
+  <div className="logo-text">
 
-          <h2>
-            NeuroForge
-          </h2>
+    <h2>
+      NeuroForge
+    </h2>
 
-          <p>
-            AI Operating System
-          </p>
+    <p>
+      AI Operating System
+    </p>
 
-        </div>
+  </div>
 
-      </div>
+</div>
 
       <button
         className="new-chat-btn"

@@ -8,19 +8,32 @@ from db.project_service import create_project
 from rag.retriever import get_context
 
 from memory.project_memory import (
-    save_memory
+    save_memory,
+    format_project_memory,
 )
 
 
 def planner_agent(state):
 
     idea = state["idea"]
-
     owner_id = state["user_id"]
 
-    # Initialize execution_steps if not present
     if "execution_steps" not in state:
         state["execution_steps"] = []
+
+    # Skip planner when continuing an existing project
+    if state.get("mode") == "continue" and state.get("project_id"):
+        state["execution_steps"].append({
+            "agent": "planner",
+            "step": "skip_resume",
+            "status": "completed",
+            "message": "Resuming existing project — skipping new plan generation",
+            "timestamp": datetime.utcnow().isoformat(),
+        })
+        state["agent_notes"].append(
+            f"Resumed project {state['project_id']} with new request"
+        )
+        return state
 
     # Add step: Starting planner
     state["execution_steps"].append({
@@ -61,6 +74,12 @@ def planner_agent(state):
     SOFTWARE IDEA:
     {idea}
     """
+
+    project_id = state.get("project_id")
+    if project_id:
+        memory_context = format_project_memory(project_id)
+        if memory_context:
+            prompt = f"{prompt}\n\n{memory_context}"
 
     response = generate_response(prompt)
 
